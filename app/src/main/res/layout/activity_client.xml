@@ -90,8 +90,7 @@
             android:layout_height="wrap_content"
             android:text="Suivant"
             android:id="@+id/btnNextClient"
-            android:layout_gravity="center_horizontal"
-            android:onClick="btnNext"/>
+            android:layout_gravity="center_horizontal"/>
 
     </LinearLayout>
 </RelativeLayout>

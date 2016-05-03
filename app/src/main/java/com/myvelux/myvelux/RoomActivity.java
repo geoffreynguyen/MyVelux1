@@ -12,19 +12,23 @@ import android.widget.ListView;
 import android.widget.SimpleAdapter;
 import android.widget.TextView;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.HashMap;
 
 public class RoomActivity extends AppCompatActivity {
 
     private ListView listViewCustom;
-    public ArrayList<String> finalQuote;
+    private Reservation resa;
+    private Commande commande;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_room);
         setTitle("Pièce");
+
+        resa = (Reservation) getIntent().getSerializableExtra("resa");
 
         listViewCustom = (ListView) findViewById(R.id.listviewperso);
         ArrayList<HashMap<String, String>> listItem = new ArrayList<HashMap<String, String>>();
@@ -57,10 +61,9 @@ public class RoomActivity extends AppCompatActivity {
             @SuppressWarnings("unchecked")
             public void onItemClick(AdapterView<?> a, View v, int position, long id) {
                 Intent intent = new Intent(getApplicationContext(), ActionActivity.class);
-
-                //Get room selected
-                //HashMap<String, String> map = (HashMap<String, String>) listViewCustom.getItemAtPosition(position);
-
+                HashMap<String, String> map = (HashMap<String, String>) listViewCustom.getItemAtPosition(position);
+                resa.getCommande().setRoom(map.get("title").toString());
+                intent.putExtra("resa",resa);
                 startActivity(intent);
             }
         });
