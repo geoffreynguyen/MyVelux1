@@ -6,8 +6,11 @@ import java.io.Serializable;
 
 /**
  * Created by geoffrey on 21/04/16.
+ * Modified by julien on 20/05/16.
  */
 public class Client implements Serializable {
+
+    private String id;
     private String LastName;
     private String firstName;
     private String address;
@@ -16,6 +19,29 @@ public class Client implements Serializable {
     private Integer mobile;
     private Integer phone;
     private String email;
+
+    public Client() {
+    }
+
+    public Client(String id, String lastName, String firstName, String address, Integer postalCode, String city, Integer mobile, Integer phone, String email) {
+        this.id = id;
+        LastName = lastName;
+        this.firstName = firstName;
+        this.address = address;
+        this.postalCode = postalCode;
+        this.city = city;
+        this.mobile = mobile;
+        this.phone = phone;
+        this.email = email;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
 
     public String getLastName() {
         return LastName;
