@@ -62,7 +62,7 @@ public class RoomActivity extends AppCompatActivity {
             public void onItemClick(AdapterView<?> a, View v, int position, long id) {
                 Intent intent = new Intent(getApplicationContext(), ActionActivity.class);
                 HashMap<String, String> map = (HashMap<String, String>) listViewCustom.getItemAtPosition(position);
-                resa.getCommande().setRoom(map.get("title").toString());
+                resa.getCommande().setRoom(map.get("title"));
                 intent.putExtra("resa",resa);
                 startActivity(intent);
             }

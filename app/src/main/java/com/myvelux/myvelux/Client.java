@@ -23,7 +23,7 @@ public class Client implements Serializable {
     public Client() {
     }
 
-    public Client(String id, String lastName, String firstName, String address, Integer postalCode, String city, Integer mobile, Integer phone, String email) {
+    public Client(String id, String lastName, String firstName, String address, String postalCode, String city, String mobile, String phone, String email) {
         this.id = id;
         LastName = lastName;
         this.firstName = firstName;

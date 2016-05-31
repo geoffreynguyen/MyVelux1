@@ -104,6 +104,8 @@ public class FinalChoiceActivity extends AppCompatActivity {
                 public void onClick(View v) {
                     // start new activity
                     Intent intent = new Intent(v.getContext(), RoomActivity.class);
+                    resa.setCommande(new Commande());
+                    intent.putExtra("resa",resa);
                     startActivity(intent);
                 }
             });
