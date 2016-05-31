@@ -34,19 +34,19 @@ public class RoomActivity extends AppCompatActivity {
         ArrayList<HashMap<String, String>> listItem = new ArrayList<HashMap<String, String>>();
 
         //Create all rooms
-        Room room1= new Room("Chambre",String.valueOf(R.mipmap.ic_launcher));
+        Room room1= new Room("Chambre",String.valueOf(R.mipmap.chambre));
         listItem.add(room1.getHashMap());
-        Room room2= new Room("Bureau",String.valueOf(R.mipmap.ic_launcher));
+        Room room2= new Room("Bureau",String.valueOf(R.mipmap.bureau));
         listItem.add(room2.getHashMap());
-        Room room3= new Room("Salle de bain",String.valueOf(R.mipmap.ic_launcher));
+        Room room3= new Room("Salle de bain",String.valueOf(R.mipmap.salle_de_bain));
         listItem.add(room3.getHashMap());
-        Room room4= new Room("Salle de jeux",String.valueOf(R.mipmap.ic_launcher));
+        Room room4= new Room("Salle de jeux",String.valueOf(R.mipmap.salle_de_jeux));
         listItem.add(room4.getHashMap());
-        Room room5= new Room("Pallier",String.valueOf(R.mipmap.ic_launcher));
-        listItem.add(room5.getHashMap());
-        Room room6= new Room("Dressing",String.valueOf(R.mipmap.ic_launcher));
+        //Room room5= new Room("Pallier",String.valueOf(R.mipmap.ic_launcher));
+        //listItem.add(room5.getHashMap());
+        Room room6= new Room("Dressing",String.valueOf(R.mipmap.dessing));
         listItem.add(room6.getHashMap());
-        Room room7= new Room("Couloir",String.valueOf(R.mipmap.ic_launcher));
+        Room room7= new Room("Couloir",String.valueOf(R.mipmap.couloir));
         listItem.add(room7.getHashMap());
 
         //Create Simple adapter (make the list)
