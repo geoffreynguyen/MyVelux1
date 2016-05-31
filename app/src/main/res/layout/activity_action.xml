@@ -9,57 +9,70 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="com.myvelux.myvelux.ActionActivity">
 
-    <RadioGroup
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="30dp"
-        android:id="@+id/radioGroup">
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
-        <RadioButton
+            <RadioGroup
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="30dp"
+                android:id="@+id/radioGroup">
+
+                <RadioButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Création"
+                    android:id="@+id/radioButton2"
+                    android:onClick="onRadioButtonClicked"
+                    android:layout_alignParentTop="true"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentStart="true"
+                    android:checked="false" />
+
+                <RadioButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Remplacement"
+                    android:id="@+id/radioButton"
+                    android:onClick="onRadioButtonClicked"
+                    android:layout_alignParentTop="true"
+                    android:layout_alignParentRight="true"
+                    android:layout_alignParentEnd="true"
+                    android:checked="false" />
+
+            </RadioGroup>
+
+        <android.support.design.widget.TextInputLayout
+            android:id="@+id/error_actionPrice"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+            <EditText
+                android:layout_width="167dp"
+                android:layout_height="wrap_content"
+                android:inputType="number"
+                android:hint="Prix main d'oeuvre"
+                android:ems="10"
+                android:id="@+id/costs"
+                android:layout_marginTop="45dp"
+                android:layout_below="@+id/radioGroup"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true" />
+
+        </android.support.design.widget.TextInputLayout>
+
+        <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Création"
-            android:id="@+id/radioButton2"
-            android:onClick="onRadioButtonClicked"
-            android:layout_alignParentTop="true"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true"
-            android:checked="false" />
-
-        <RadioButton
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Remplacement"
-            android:id="@+id/radioButton"
-            android:onClick="onRadioButtonClicked"
-            android:layout_alignParentTop="true"
-            android:layout_alignParentRight="true"
-            android:layout_alignParentEnd="true"
-            android:checked="false" />
-
-    </RadioGroup>
-
-    <EditText
-        android:layout_width="167dp"
-        android:layout_height="wrap_content"
-        android:inputType="number"
-        android:hint="Prix main d'oeuvre"
-        android:ems="10"
-        android:id="@+id/costs"
-        android:layout_marginTop="45dp"
-        android:layout_below="@+id/radioGroup"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
-
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Suivant"
-        android:id="@+id/btnNextAction"
-        android:layout_gravity="center_horizontal"
-        android:onClick="btnNext"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginBottom="143dp" />
+            android:text="Suivant"
+            android:id="@+id/btnNextAction"
+            android:layout_gravity="center_horizontal"
+            android:onClick="btnNext"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="143dp" />
+    </LinearLayout>
 
 </RelativeLayout>

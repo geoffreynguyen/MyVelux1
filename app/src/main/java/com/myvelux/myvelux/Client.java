@@ -11,10 +11,10 @@ public class Client implements Serializable {
     private String LastName;
     private String firstName;
     private String address;
-    private Integer postalCode;
+    private String postalCode;
     private String city;
-    private Integer mobile;
-    private Integer phone;
+    private String mobile;
+    private String phone;
     private String email;
 
     public String getLastName() {
@@ -41,11 +41,11 @@ public class Client implements Serializable {
         this.firstName = firstName;
     }
 
-    public Integer getPostalCode() {
+    public String getPostalCode() {
         return postalCode;
     }
 
-    public void setPostalCode(Integer postalCode) {
+    public void setPostalCode(String postalCode) {
         this.postalCode = postalCode;
     }
 
@@ -57,19 +57,19 @@ public class Client implements Serializable {
         this.city = city;
     }
 
-    public Integer getMobile() {
+    public String getMobile() {
         return mobile;
     }
 
-    public void setMobile(Integer mobile) {
+    public void setMobile(String mobile) {
         this.mobile = mobile;
     }
 
-    public Integer getPhone() {
+    public String getPhone() {
         return phone;
     }
 
-    public void setPhone(Integer phone) {
+    public void setPhone(String phone) {
         this.phone = phone;
     }
 

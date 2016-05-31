@@ -2,6 +2,14 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.myvelux.myvelux">
 
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+
+    <!-- To auto-complete the email text field in the login form with the user's emails -->
+    <uses-permission android:name="android.permission.GET_ACCOUNTS" />
+    <uses-permission android:name="android.permission.READ_PROFILE" />
+    <uses-permission android:name="android.permission.READ_CONTACTS" />
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -16,14 +24,8 @@
             </intent-filter>
         </activity>
         <activity android:name=".ClientActivity">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value=".MainActivity" />
         </activity>
         <activity android:name=".RoomActivity">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value=".ClientActivity" />
         </activity>
         <activity android:name=".ActionActivity">
             <meta-data
@@ -55,7 +57,19 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".SizeActivity" />
         </activity>
-        <activity android:name=".FinalChoiceActivity"></activity>
+        <activity android:name=".FinalChoiceActivity">
+
+        </activity>
+        <activity android:name=".MyVeluxPDF">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".FinalChoiceActivity" />
+        </activity>
+        <activity android:name=".ShowCommande">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".FinalChoiceActivity" />
+        </activity>
     </application>
 
 </manifest>

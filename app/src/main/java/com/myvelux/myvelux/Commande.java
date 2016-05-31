@@ -16,6 +16,11 @@ public class Commande implements Serializable {
     private String size;
     private String fitting;
 
+    public Commande(){
+        this.action = "";
+        this.actionPrice = "";
+    }
+
     public String getRoom() {
         return room;
     }

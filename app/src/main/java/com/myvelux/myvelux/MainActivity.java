@@ -16,6 +16,5 @@ public class MainActivity extends AppCompatActivity {
     protected void btnNext(View view) {
         Intent intent = new Intent(this, ClientActivity.class);
         startActivity(intent);
-
     }
 }
