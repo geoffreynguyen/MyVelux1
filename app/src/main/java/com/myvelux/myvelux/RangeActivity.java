@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
@@ -37,14 +38,6 @@ public class RangeActivity extends AppCompatActivity {
         }
     }
 
-    protected void btnNext(View view){
-        // start new activity
-        Intent intent = new Intent(view.getContext(), RoomActivity.class);
-        resa = (Reservation) getIntent().getSerializableExtra("resa");
-        intent.putExtra("resa",resa);
-        startActivity(intent);
-    }
-
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
@@ -52,8 +45,19 @@ public class RangeActivity extends AppCompatActivity {
                 // app icon in action bar clicked; goto parent activity.
                 this.finish();
                 return true;
+            case R.id.menu_client_detail:
+                MenuUpdate updateClient = new MenuUpdate();
+                Intent intent = new Intent(getApplicationContext(), ClientActivity.class);
+                startActivity(updateClient.clientMenu(intent, resa, 1, getClass().toString()));
+                return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu, menu);
+        return true;
     }
 }

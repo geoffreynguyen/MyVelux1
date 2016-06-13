@@ -1,31 +1,25 @@
 package com.myvelux.myvelux;
 
+import android.content.Context;
 import android.content.Intent;
 import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.telephony.PhoneNumberUtils;
-import android.text.Editable;
-import android.text.TextWatcher;
-import android.util.Patterns;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.LinearLayout;
-import android.widget.Toast;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Objects;
 import java.util.regex.Pattern;
+import static java.lang.Class.forName;
 
 public class ClientActivity extends AppCompatActivity {
 
     private Reservation resa;
     private Client client;
     private Commande commande;
+    private int updateClient;
     boolean okFirstName, okLastName, okAddress, okPostalCode,okCity,okPhone1,okPhone2,okEmail;
     EditText firstName, lastName, address, postalCode, city, phone1, phone2, email;
     TextInputLayout errorFirstName, errorLastName,
@@ -36,7 +30,8 @@ public class ClientActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_client);
         setTitle("Informations client");
-        resa = new Reservation();
+
+        updateClient = getIntent().getIntExtra("updateClient",0);
 
         firstName   = (EditText)findViewById(R.id.firstName);
         lastName   = (EditText)findViewById(R.id.lastName);
@@ -46,6 +41,26 @@ public class ClientActivity extends AppCompatActivity {
         phone1   = (EditText)findViewById(R.id.phone1);
         phone2   = (EditText)findViewById(R.id.phone2);
         email = (EditText)findViewById(R.id.email);
+
+        if (updateClient==0){
+            resa = new Reservation();
+            client = new Client();
+            commande = new Commande();
+            resa.setCommande(commande);
+        }else{
+            resa = (Reservation) getIntent().getSerializableExtra("resa");
+            client = resa.getClient();
+
+            firstName.setText(client.getFirstName());
+            lastName.setText(client.getLastName());
+            address.setText(client.getAddress());
+            postalCode.setText(client.getPostalCode());
+            city.setText(client.getCity());
+            phone1.setText(client.getMobile());
+            phone2.setText(client.getPhone());
+            email.setText(client.getEmail());
+        }
+
         errorFirstName = (TextInputLayout) findViewById(R.id.error_firstName);
         errorLastName = (TextInputLayout) findViewById(R.id.error_lastName);
         errorAddress = (TextInputLayout) findViewById(R.id.error_address);
@@ -84,37 +99,49 @@ public class ClientActivity extends AppCompatActivity {
                     okEmail = isValidEmail(email, errorEmail);
 
                     /*if(okFirstName && okLastName && okCity && okAddress &&
-                            okPostalCode && !okPhone1 && !okPhone2 && okEmail) {*/
-                        client = new Client();
-                        commande = new Commande();
-                        resa.setCommande(commande);
+                            okPostalCode && !okPhone1 && !okPhone2 && okEmail) {
 
-                        /*client.setLastName(lastName.getText().toString());
+                        client.setLastName(lastName.getText().toString());
                         client.setFirstName(firstName.getText().toString());
                         client.setAddress(address.getText().toString());
                         client.setCity(city.getText().toString());
                         client.setPostalCode(postalCode.getText().toString());
                         client.setPhone(phone2.getText().toString());
                         client.setMobile(phone1.getText().toString());
-                        client.setEmail(email.getText().toString());*/
-
+                        client.setEmail(email.getText().toString());
+*/
                         client.setLastName("Geoffrey");
                         client.setFirstName("Nguyen");
                         client.setAddress("rue des marrons chauds");
                         client.setCity("Paris");
                         client.setPostalCode("75018");
-                        client.setPhone("01184200220");
+                        client.setPhone("0118420022");
                         client.setMobile("0650510137");
                         client.setEmail("geoffrey.nguyen@hotmail.fr");
 
                         resa.setClient(client);
 
-                        Intent intent = new Intent(v.getContext(), RoomActivity.class);
-                        intent.putExtra("resa", resa);
-                        startActivity(intent);
-                        finish();
-                    //}
-                }
+                        if(updateClient==0){
+                            Intent intent = new Intent(v.getContext(), RoomActivity.class);
+                            intent.putExtra("resa", resa);
+                            startActivity(intent);
+                            finish();
+                        }else{
+                            String test = getIntent().getStringExtra("backActivity");
+                            Intent intent = null;
+                            try {
+                                intent = new Intent(v.getContext(), forName(test.replace("class","").trim()));
+                                intent.putExtra("resa", resa);
+                                startActivity(intent);
+                                finish();
+
+                            } catch (ClassNotFoundException e) {
+                                e.printStackTrace();
+                            }
+
+                        }
+                    }
+                //}
             });
         }
     }

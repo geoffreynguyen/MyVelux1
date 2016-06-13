@@ -34,7 +34,6 @@ public class GeneratorPDF {
 
     public Boolean write(String fname, Reservation fcontent) {
         try {
-            Log.i("test : ",fname);
             String fpath = "/sdcard/" + fname + ".pdf";
             File file = new File(fpath);
             // If file does not exists, then create it

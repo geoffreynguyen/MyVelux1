@@ -6,6 +6,8 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -14,12 +16,10 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
-import java.util.List;
 
 public class FinalChoiceActivity extends AppCompatActivity {
 
     private Reservation resa;
-    private Commande commande;
     private ListView lv;
 
     @Override
@@ -29,9 +29,22 @@ public class FinalChoiceActivity extends AppCompatActivity {
         setTitle("Choix final");
 
         resa = (Reservation) getIntent().getSerializableExtra("resa");
-        resa.addArrayCommande(resa.getCommande());
+
+        //Supprime les doublons
+        if(resa.getCommandes().size()==0){
+            resa.addArrayCommande(resa.getCommande());
+        }else{
+            for (int i=0; i<resa.getCommandes().size();i++){
+                if(resa.getCommande()!=resa.getCommandes().get(i)){
+                    resa.addArrayCommande(resa.getCommande());
+                }
+            }
+        }
+
         lv = (ListView) findViewById(R.id.listViewFinal);
+
         if(resa.getCommandes().size()!=0){
+
             final ArrayList<Commande> arrayCommande = resa.getCommandes();
             // This is the array adapter, it takes the context of the activity as a
             // first parameter, the type of list view as a second parameter and your
@@ -54,7 +67,7 @@ public class FinalChoiceActivity extends AppCompatActivity {
                     adb.setMessage("Choix action ?");
                     adb.setNeutralButton("Afficher", new AlertDialog.OnClickListener() {
                         public void onClick(DialogInterface dialog, int which) {
-                            Intent intent = new Intent(view.getContext(), ShowCommande.class);
+                            Intent intent = new Intent(view.getContext(), ShowCommandeActivity.class);
                             intent.putExtra("commande", c1);
                             startActivity(intent);
                         }
@@ -111,4 +124,31 @@ public class FinalChoiceActivity extends AppCompatActivity {
             });
         }
     }
+
+    @Override
+    public void onBackPressed()
+    {
+
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.menu_client_detail:
+                MenuUpdate updateClient = new MenuUpdate();
+                Intent intent = new Intent(getApplicationContext(), ClientActivity.class);
+                startActivity(updateClient.clientMenu(intent, resa, 1, getClass().toString()));
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu, menu);
+        return true;
+    }
+
+
 }

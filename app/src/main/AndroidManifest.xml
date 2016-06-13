@@ -23,10 +23,8 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".ClientActivity">
-        </activity>
-        <activity android:name=".RoomActivity">
-        </activity>
+        <activity android:name=".ClientActivity"></activity>
+        <activity android:name=".RoomActivity"></activity>
         <activity android:name=".ActionActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
@@ -57,19 +55,18 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".SizeActivity" />
         </activity>
-        <activity android:name=".FinalChoiceActivity">
-
-        </activity>
+        <activity android:name=".FinalChoiceActivity"></activity>
         <activity android:name=".MyVeluxPDF">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".FinalChoiceActivity" />
         </activity>
-        <activity android:name=".ShowCommande">
+        <activity android:name=".ShowCommandeActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".FinalChoiceActivity" />
         </activity>
+        <activity android:name=".ShowClientActivity"></activity>
     </application>
 
 </manifest>

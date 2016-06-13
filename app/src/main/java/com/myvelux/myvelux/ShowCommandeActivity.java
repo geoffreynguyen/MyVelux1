@@ -7,7 +7,7 @@ import android.util.Log;
 import android.view.MenuItem;
 import android.widget.TextView;
 
-public class ShowCommande extends AppCompatActivity {
+public class ShowCommandeActivity extends AppCompatActivity {
 
     private Commande commande;
     TextView action, actionPrice, room, range, type, version, size, fitting;

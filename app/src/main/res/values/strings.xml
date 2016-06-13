@@ -2,6 +2,8 @@
     <string name="app_name">MyVelux</string>
     <string name="title_activity_login">Sign in</string>
 
+    <string name="menu_client_detail">Détails du client</string>
+
     <!-- Strings related to login -->
     <string name="prompt_email">Email</string>
     <string name="prompt_password">Password (optional)</string>
