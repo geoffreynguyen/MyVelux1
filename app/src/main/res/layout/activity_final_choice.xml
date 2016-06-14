@@ -27,14 +27,14 @@
         <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Terminer"
+            android:text="GENERER DEVIS"
             android:id="@+id/btnEndChoice"
             android:layout_gravity="center_horizontal"/>
 
         <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Continuer"
+            android:text="CONTINUER"
             android:id="@+id/btnContinueChoice"
             android:layout_gravity="center_horizontal"/>
 

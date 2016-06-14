@@ -16,7 +16,7 @@ import android.widget.Toast;
 
 import java.util.ArrayList;
 
-public class ActionActivity extends AppCompatActivity {
+public class ActionActivity extends BaseActivity {
 
     private Reservation resa;
     private String action = "";
@@ -77,23 +77,6 @@ public class ActionActivity extends AppCompatActivity {
             });
         }
 
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case android.R.id.home:
-                // app icon in action bar clicked; goto parent activity.
-                this.finish();
-                return true;
-            case R.id.menu_client_detail:
-                MenuUpdate updateClient = new MenuUpdate();
-                Intent intent = new Intent(getApplicationContext(), ClientActivity.class);
-                startActivity(updateClient.clientMenu(intent, resa, 1, getClass().toString()));
-                return true;
-            default:
-                return super.onOptionsItemSelected(item);
-        }
     }
 
     public void onRadioButtonClicked(View view) {
