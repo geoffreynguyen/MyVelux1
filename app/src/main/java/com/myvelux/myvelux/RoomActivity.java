@@ -13,7 +13,7 @@ import android.widget.SimpleAdapter;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-public class RoomActivity extends AppCompatActivity {
+public class RoomActivity extends BaseActivity {
 
     private ListView listViewCustom;
     private Reservation resa;
@@ -66,29 +66,6 @@ public class RoomActivity extends AppCompatActivity {
         });
 
 
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case android.R.id.home:
-                // app icon in action bar clicked; goto parent activity.
-                this.finish();
-                return true;
-            case R.id.menu_client_detail:
-                MenuUpdate updateClient = new MenuUpdate();
-                Intent intent = new Intent(getApplicationContext(), ClientActivity.class);
-                startActivity(updateClient.clientMenu(intent, resa, 1, getClass().toString()));
-                return true;
-            default:
-                return super.onOptionsItemSelected(item);
-        }
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu, menu);
-        return true;
     }
 
 }

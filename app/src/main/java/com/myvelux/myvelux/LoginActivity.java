@@ -37,6 +37,7 @@ import java.util.List;
 
 import static android.Manifest.permission.READ_CONTACTS;
 import android.content.SharedPreferences;
+import android.widget.Toast;
 
 /**
  * A login screen that offers login via email/password.
@@ -336,6 +337,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 
             if(storedPassword.equals("NOT EXIST")){
                 loginDataBaseAdapter.insertEntry("admin@hotmail.fr","admin");
+                Toast.makeText(getBaseContext(), "[admin@hotmail.fr / admin ] Crée", Toast.LENGTH_LONG).show();
             }else if(mPassword.equals(storedPasswordLogin)){
                 mailExist = true;
                 SharedPrefManager.setLogin(mEmail); // need string value so convert it

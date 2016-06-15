@@ -9,170 +9,20 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="com.myvelux.myvelux.ClientActivity">
 
-    <LinearLayout
-        android:orientation="vertical"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_centerHorizontal="true"
-        android:weightSum="1"
-        android:id="@+id/myLinearLayout">
+    <ListView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/listClient"
+        android:layout_centerHorizontal="true" />
 
-        <LinearLayout
-            android:orientation="horizontal"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content">
+    <Button
+        style="?android:attr/buttonStyleSmall"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Ajouter un client"
+        android:id="@+id/addClient"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true" />
 
-            <android.support.design.widget.TextInputLayout
-                android:id="@+id/error_firstName"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="0.5">
-
-                <EditText
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:inputType="textPersonName"
-                    android:hint="Nom"
-                    android:ems="10"
-                    android:id="@+id/firstName"
-                    android:layout_gravity="center_horizontal" />
-
-            </android.support.design.widget.TextInputLayout>
-
-            <android.support.design.widget.TextInputLayout
-                android:id="@+id/error_lastName"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="0.5">
-
-                <EditText
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:inputType="textPersonName"
-                    android:hint="Prénom"
-                    android:ems="10"
-                    android:id="@+id/lastName"
-                    android:layout_gravity="center_horizontal" />
-
-            </android.support.design.widget.TextInputLayout>
-        </LinearLayout>
-
-        <android.support.design.widget.TextInputLayout
-            android:id="@+id/error_address"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
-            <EditText
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:id="@+id/address"
-                android:layout_gravity="center_horizontal"
-                android:hint="Adresse" />
-
-        </android.support.design.widget.TextInputLayout>
-
-        <LinearLayout
-            android:orientation="horizontal"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content">
-
-            <android.support.design.widget.TextInputLayout
-                android:id="@+id/error_city"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_weight="0.5">
-
-                <EditText
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:inputType="text"
-                    android:id="@+id/city"
-                    android:layout_gravity="center_horizontal"
-                    android:hint="Ville" />
-
-            </android.support.design.widget.TextInputLayout>
-
-            <android.support.design.widget.TextInputLayout
-                android:id="@+id/error_postalCode"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_weight="0.5">
-
-                <EditText
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:inputType="number"
-                    android:ems="10"
-                    android:id="@+id/postalCode"
-                    android:layout_gravity="center_horizontal"
-                    android:hint="Code postal" />
-
-            </android.support.design.widget.TextInputLayout>
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:orientation="horizontal"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content">
-
-            <android.support.design.widget.TextInputLayout
-                android:id="@+id/error_phone1"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="0.5">
-
-                <EditText
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:inputType="phone"
-                    android:ems="10"
-                    android:id="@+id/phone1"
-                    android:layout_gravity="center_horizontal"
-                    android:hint="Téléphone portable" />
-
-            </android.support.design.widget.TextInputLayout>
-
-            <android.support.design.widget.TextInputLayout
-                android:id="@+id/error_phone2"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="0.5">
-
-                <EditText
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:inputType="phone"
-                    android:ems="10"
-                    android:id="@+id/phone2"
-                    android:layout_gravity="center_horizontal"
-                    android:hint="Téléphone fixe" />
-
-            </android.support.design.widget.TextInputLayout>
-        </LinearLayout>
-
-        <android.support.design.widget.TextInputLayout
-            android:id="@+id/error_email"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
-            <EditText
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:inputType="textEmailAddress"
-                android:ems="10"
-                android:id="@+id/email"
-                android:layout_gravity="center_horizontal"
-                android:hint="Email" />
-
-        </android.support.design.widget.TextInputLayout>
-
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Suivant"
-            android:id="@+id/btnNextClient"
-            android:layout_gravity="center_horizontal"/>
-
-    </LinearLayout>
 </RelativeLayout>
