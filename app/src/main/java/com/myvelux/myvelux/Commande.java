@@ -20,8 +20,6 @@ public class Commande implements Serializable {
     private String idCLient;
 
     public Commande() {
-        this.action = "";
-        this.actionPrice = "";
     }
 
     public Commande(String id, String room, String action, String actionPrice, String range, String type, String version, String size, String fitting, String idCLient) {
