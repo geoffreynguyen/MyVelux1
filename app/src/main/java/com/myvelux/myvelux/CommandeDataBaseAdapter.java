@@ -28,7 +28,7 @@ public class CommandeDataBaseAdapter {
     private static final String COL_FITTING = "fitting";
     private static final String COL_CLIENT = "idClient";
 
-    String CREATE_TABLE_COMMANDS = "CREATE TABLE " + TABLE_COMMANDS + "(" +
+    static final String DATABASE_COMMANDS = "CREATE TABLE " + TABLE_COMMANDS + "(" +
             COL_ID_COMMAND + " INTEGER PRIMARY KEY AUTOINCREMENT," +
             COL_ROOM    + " TEXT," +
             COL_ACTION  + " TEXT," +
@@ -47,7 +47,7 @@ public class CommandeDataBaseAdapter {
     // Database open/upgrade helper
     private DataBaseHelper dbHelper;
 
-    public  CommandeDataBaseAdapter(Context _context)
+    public CommandeDataBaseAdapter(Context _context)
     {
         context = _context;
         dbHelper = new DataBaseHelper(context, DATABASE_NAME, null, DATABASE_VERSION);
