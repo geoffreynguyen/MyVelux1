@@ -7,16 +7,21 @@ import android.util.Log;
 import android.view.MenuItem;
 import android.widget.TextView;
 
-public class ShowCommandeActivity extends AppCompatActivity {
+public class ShowCommandeActivity extends BaseActivity {
 
+    private int idCommande;
     private Commande commande;
     TextView action, actionPrice, room, range, type, version, size, fitting;
+    CommandeDataBaseAdapter commandeDataBaseAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_show_commande);
         setTitle("Détail de le commande");
+
+        commandeDataBaseAdapter = new CommandeDataBaseAdapter(this);
+        commandeDataBaseAdapter = commandeDataBaseAdapter.open();
 
         action = (TextView) findViewById(R.id.actionShow);
         actionPrice = (TextView) findViewById(R.id.actionPriceShow);
@@ -27,7 +32,11 @@ public class ShowCommandeActivity extends AppCompatActivity {
         size = (TextView) findViewById(R.id.sizeShow);
         fitting = (TextView) findViewById(R.id.fittingShow);
 
-        commande = (Commande) getIntent().getSerializableExtra("commande");
+        idCommande = getIntent().getIntExtra("idCommande", -1);
+
+        commande = commandeDataBaseAdapter.getSinlgeEntry(idCommande);
+
+        Log.i("idCommande", String.valueOf(idCommande));
 
         action.setText(commande.getAction());
         actionPrice.setText(commande.getActionPrice());
@@ -39,15 +48,5 @@ public class ShowCommandeActivity extends AppCompatActivity {
         fitting.setText(commande.getFitting());
     }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case android.R.id.home:
-                // app icon in action bar clicked; goto parent activity.
-                this.finish();
-                return true;
-            default:
-                return super.onOptionsItemSelected(item);
-        }
-    }
+
 }

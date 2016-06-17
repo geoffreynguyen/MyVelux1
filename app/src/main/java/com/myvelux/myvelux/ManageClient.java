@@ -14,7 +14,7 @@ import java.util.regex.Pattern;
 
 import static java.lang.Class.forName;
 
-public class ManageClient extends AppCompatActivity {
+public class ManageClient extends BaseActivity {
 
     ClientDataBaseAdapter clientDataBaseAdapter;
 
@@ -35,6 +35,7 @@ public class ManageClient extends AppCompatActivity {
         clientDataBaseAdapter = new ClientDataBaseAdapter(this);
         clientDataBaseAdapter = clientDataBaseAdapter.open();
 
+        // -1 is the default value if idClient is not declared
         updateClient = getIntent().getIntExtra("idClient",-1);
 
         firstName   = (EditText)findViewById(R.id.firstName);
@@ -51,6 +52,7 @@ public class ManageClient extends AppCompatActivity {
         }else{
             client = clientDataBaseAdapter.getSinlgeEntry(updateClient);
             client.setId(String.valueOf(updateClient));
+            client.setEmail(client.getEmail());
             firstName.setText(client.getFirstName());
             lastName.setText(client.getLastName());
             address.setText(client.getAddress());
@@ -124,7 +126,8 @@ public class ManageClient extends AppCompatActivity {
 
                         if (updateClient==-1){
                             if(!clientDataBaseAdapter.checkClientByEmail(email.getText().toString())){
-                                clientDataBaseAdapter.insertEntry(client);
+                                client.setEmail(email.getText().toString());
+                                SharedPrefManager.setIdClient((int) clientDataBaseAdapter.insertEntry(client));
                                 Intent intent = new Intent(getApplicationContext(), ClientActivity.class);
                                 startActivity(intent);
                                 finish();
@@ -147,6 +150,7 @@ public class ManageClient extends AppCompatActivity {
                                     Toast.makeText(getBaseContext(), "Un client possède déjà cet email", Toast.LENGTH_SHORT).show();
                                 }
                             }else{
+                                client.setEmail(email.getText().toString());
                                 clientDataBaseAdapter.updateEntry(client);
                                 Intent intent = new Intent(getApplicationContext(), ClientActivity.class);
                                 startActivity(intent);
@@ -224,4 +228,13 @@ public class ManageClient extends AppCompatActivity {
 
         return valid;
     }
+
+    @Override
+    public void onBackPressed()
+    {
+        Intent intent = new Intent(getApplicationContext(), ClientActivity.class);
+        startActivity(intent);
+        finish();
+    }
+
 }

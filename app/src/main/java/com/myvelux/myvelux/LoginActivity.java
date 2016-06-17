@@ -49,7 +49,6 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
      */
     private static final int REQUEST_READ_CONTACTS = 0;
 
-    LoginDataBaseAdapter loginDataBaseAdapter;
 
     /**
      * Keep track of the login task to ensure we can cancel it if requested.
@@ -68,9 +67,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-        // create a instance of SQLite Database
-        loginDataBaseAdapter=new LoginDataBaseAdapter(this);
-        loginDataBaseAdapter=loginDataBaseAdapter.open();
+
 
         // Set up the login form.
         mEmailView = (AutoCompleteTextView) findViewById(R.id.email);
@@ -208,7 +205,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 
     private boolean isEmailValid(String email) {
         //TODO: Replace this with your own logic
-        return email.contains("@");
+        return true;
     }
 
     private boolean isPasswordValid(String password) {
@@ -316,6 +313,9 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         private final String mPassword;
         private boolean mailExist = false;
 
+        LoginDataBaseAdapter loginDataBaseAdapter;
+
+
         UserLoginTask(String email, String password) {
             mEmail = email;
             mPassword = password;
@@ -330,18 +330,25 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             } catch (InterruptedException e) {
                 return false;
             }
+            // create a instance of SQLite Database
+            loginDataBaseAdapter=new LoginDataBaseAdapter(getApplicationContext());
+            loginDataBaseAdapter=loginDataBaseAdapter.open();
 
             // fetch the Password form database for respective user name
-            String storedPassword=loginDataBaseAdapter.getSinlgeEntry("admin@hotmail.fr");
-            String storedPasswordLogin=loginDataBaseAdapter.getSinlgeEntry(mEmail);
+            User userAdmin=loginDataBaseAdapter.getSinlgeEntry("admin");
+            User userExist=loginDataBaseAdapter.getSinlgeEntry(mEmail);
 
-            if(storedPassword.equals("NOT EXIST")){
-                loginDataBaseAdapter.insertEntry("admin@hotmail.fr","admin");
-                Toast.makeText(getBaseContext(), "[admin@hotmail.fr / admin ] Crée", Toast.LENGTH_LONG).show();
-            }else if(mPassword.equals(storedPasswordLogin)){
+            if(userAdmin == null){
+                User user = new User();
+                user.setUserName("admin");
+                user.setPassword("admin");
+                user.setIsAdmin(1);
+                loginDataBaseAdapter.insertEntry(user);
+            }else if(userExist != null && mPassword.equals(userExist.getPassword())){
                 mailExist = true;
-                SharedPrefManager.setLogin(mEmail); // need string value so convert it
+                SharedPrefManager.setLogin(userExist.getUserName()); // need string value so convert it
                 SharedPrefManager.setConnected(true); // need integer value so convert it
+                SharedPrefManager.setIdLogin(Integer.parseInt(userExist.getId())); // need integer value so convert it
                 //now save all to shared pref, all updated values are now available in SharedPrefManager class, as we set above
                 SharedPrefManager.StoreToPref();
 
@@ -357,10 +364,12 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             showProgress(false);
 
             if (success) {
+                loginDataBaseAdapter.db.close();
                 Intent intent = new Intent(getApplicationContext(), FinalChoiceActivity.class);
                 startActivity(intent);
                 finish();
             } else {
+                loginDataBaseAdapter.db.close();
                 if(!mailExist){
                     mEmailView.setError(getString(R.string.error_incorrect_mail));
                 }

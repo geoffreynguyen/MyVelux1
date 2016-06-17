@@ -16,8 +16,7 @@ import java.util.HashMap;
 public class RoomActivity extends BaseActivity {
 
     private ListView listViewCustom;
-    private Reservation resa;
-    private Commande commande;
+    private Commande com;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -25,7 +24,7 @@ public class RoomActivity extends BaseActivity {
         setContentView(R.layout.activity_room);
         setTitle("Pièce");
 
-        resa = (Reservation) getIntent().getSerializableExtra("resa");
+        com = (Commande) getIntent().getSerializableExtra("com");
 
         listViewCustom = (ListView) findViewById(R.id.listviewperso);
         ArrayList<HashMap<String, String>> listItem = new ArrayList<HashMap<String, String>>();
@@ -59,8 +58,8 @@ public class RoomActivity extends BaseActivity {
             public void onItemClick(AdapterView<?> a, View v, int position, long id) {
                 Intent intent = new Intent(getApplicationContext(), ActionActivity.class);
                 HashMap<String, String> map = (HashMap<String, String>) listViewCustom.getItemAtPosition(position);
-                resa.getCommande().setRoom(map.get("title"));
-                intent.putExtra("resa",resa);
+                com.setRoom(map.get("title"));
+                intent.putExtra("com",com);
                 startActivity(intent);
             }
         });

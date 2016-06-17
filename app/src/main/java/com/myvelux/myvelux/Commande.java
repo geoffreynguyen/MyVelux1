@@ -17,12 +17,14 @@ public class Commande implements Serializable {
     private String version;
     private String size;
     private String fitting;
-    private String idCLient;
+    private String idClient;
 
     public Commande() {
+        this.action = " ";
+        this.actionPrice = " ";
     }
 
-    public Commande(String id, String room, String action, String actionPrice, String range, String type, String version, String size, String fitting, String idCLient) {
+    public Commande(String id, String room, String action, String actionPrice, String range, String type, String version, String size, String fitting, String idClient) {
         this.id = id;
         this.room = room;
         this.action = action;
@@ -32,7 +34,7 @@ public class Commande implements Serializable {
         this.version = version;
         this.size = size;
         this.fitting = fitting;
-        this.idCLient = idCLient;
+        this.idClient = idClient;
     }
 
     public String getId() {
@@ -107,11 +109,11 @@ public class Commande implements Serializable {
         this.fitting = fitting;
     }
 
-    public String getIdCLient() {
-        return idCLient;
+    public String getIdClient() {
+        return idClient;
     }
 
-    public void setIdCLient(String idCLient) {
-        this.idCLient = idCLient;
+    public void setIdClient(String idClient) {
+        this.idClient = idClient;
     }
 }

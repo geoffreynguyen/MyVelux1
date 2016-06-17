@@ -13,7 +13,7 @@ import android.widget.LinearLayout;
 
 public class RangeActivity extends BaseActivity {
 
-    private Reservation resa;
+    private Commande com;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -22,7 +22,7 @@ public class RangeActivity extends BaseActivity {
         setTitle("Gamme");
 
         Button button= (Button) findViewById(R.id.btnNextRange);
-        resa = (Reservation) getIntent().getSerializableExtra("resa");
+        com = (Commande) getIntent().getSerializableExtra("com");
 
         if (button != null) {
             button.setOnClickListener(new View.OnClickListener() {
@@ -30,8 +30,8 @@ public class RangeActivity extends BaseActivity {
                 public void onClick(View v) {
                     // start new activity
                     Intent intent = new Intent(v.getContext(), TypeActivity.class);
-                    resa.getCommande().setRange("Solaire");
-                    intent.putExtra("resa",resa);
+                    com.setRange("Solaire");
+                    intent.putExtra("com",com);
                     startActivity(intent);
                 }
             });

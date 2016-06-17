@@ -10,7 +10,7 @@ import android.widget.Button;
 
 public class VersionActivity extends BaseActivity {
 
-    private Reservation resa;
+    private Commande com;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -18,7 +18,8 @@ public class VersionActivity extends BaseActivity {
         setContentView(R.layout.activity_version);
         setTitle("Version");
         
-        resa = (Reservation) getIntent().getSerializableExtra("resa");
+        com = (Commande) getIntent().getSerializableExtra("com");
+
         Button btnNextVersion= (Button) findViewById(R.id.btnNextVersion);
         if (btnNextVersion != null) {
             btnNextVersion.setOnClickListener(new View.OnClickListener() {
@@ -26,8 +27,8 @@ public class VersionActivity extends BaseActivity {
                 public void onClick(View v) {
                     // start new activity
                     Intent intent = new Intent(v.getContext(), SizeActivity.class);
-                    resa.getCommande().setVersion("Confort");
-                    intent.putExtra("resa",resa);
+                    com.setVersion("Confort");
+                    intent.putExtra("com",com);
                     startActivity(intent);
                 }
             });

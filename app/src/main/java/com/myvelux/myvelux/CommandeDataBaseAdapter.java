@@ -12,7 +12,7 @@ import android.database.sqlite.SQLiteDatabase;
 public class CommandeDataBaseAdapter {
 
     static final String DATABASE_NAME = "MyVelux.db";
-    static final int DATABASE_VERSION = 3;
+    static final int DATABASE_VERSION = 6;
     static final String TABLE_COMMANDS = "COMMANDE";
     // Client Table Columns names
 
@@ -27,8 +27,9 @@ public class CommandeDataBaseAdapter {
     private static final String COL_SIZE = "size";
     private static final String COL_FITTING = "fitting";
     private static final String COL_CLIENT = "idClient";
+    private static final String COL_DELETED = "deleted";
 
-    String CREATE_TABLE_COMMANDS = "CREATE TABLE " + TABLE_COMMANDS + "(" +
+    static final String DATABASE_COMMANDS = "CREATE TABLE " + TABLE_COMMANDS + "(" +
             COL_ID_COMMAND + " INTEGER PRIMARY KEY AUTOINCREMENT," +
             COL_ROOM    + " TEXT," +
             COL_ACTION  + " TEXT," +
@@ -38,6 +39,7 @@ public class CommandeDataBaseAdapter {
             COL_VERSION + " TEXT," +
             COL_SIZE    + " LONG," +
             COL_FITTING + " TEXT," +
+            COL_DELETED + " INT DEFAULT 0," +
             COL_CLIENT  + " TEXT" + ")";
 
     // Variable to hold the database instance
@@ -78,7 +80,7 @@ public class CommandeDataBaseAdapter {
         values.put(COL_VERSION, com.getVersion());
         values.put(COL_SIZE, com.getSize());
         values.put(COL_FITTING, com.getFitting());
-        //values.put(COL_CLIENT, com.());
+        values.put(COL_CLIENT, com.getIdClient());
 
         // Inserting Row
         long id = db.insert(TABLE_COMMANDS, null, values);
@@ -98,12 +100,17 @@ public class CommandeDataBaseAdapter {
 
     public int deleteCommandeById(int idCommande)
     {
+        // Define the updated row content.
+        ContentValues updatedValues = new ContentValues();
+
+        updatedValues.put(COL_DELETED, 1);
         //String id=String.valueOf(ID);
         String where = COL_ID_COMMAND+"=?";
-        int numberOFEntriesDeleted= db.delete(TABLE_COMMANDS, where, new String[]{String.valueOf(idCommande)}) ;
+        int numberOFEntriesDeleted= db.update(TABLE_COMMANDS,updatedValues, where, new String[]{String.valueOf(idCommande)}) ;
         // Toast.makeText(context, "Number fo Entry Deleted Successfully : "+numberOFEntriesDeleted, Toast.LENGTH_LONG).show();
         return numberOFEntriesDeleted;
     }
+
 
     public Commande getSinlgeEntry(int idCommande)
     {
@@ -123,7 +130,7 @@ public class CommandeDataBaseAdapter {
         com.setVersion(cursor.getString(cursor.getColumnIndex(COL_VERSION)));
         com.setSize(cursor.getString(cursor.getColumnIndex(COL_SIZE)));
         com.setFitting(cursor.getString(cursor.getColumnIndex(COL_FITTING)));
-        com.setIdCLient(cursor.getString(cursor.getColumnIndex(COL_CLIENT)));
+        com.setIdClient(cursor.getString(cursor.getColumnIndex(COL_CLIENT)));
         cursor.close();
         return com;
     }
@@ -148,6 +155,13 @@ public class CommandeDataBaseAdapter {
 
     public Cursor findAll(){
         String mySql = " SELECT * FROM "+TABLE_COMMANDS;
+        return db.rawQuery(mySql, null);
+    }
+    public Cursor findCommandsByClient(int idClient){
+
+        String mySql = " SELECT * FROM "+ TABLE_COMMANDS +
+                " WHERE "+ COL_CLIENT +" = "+ idClient +
+                " AND "+ COL_DELETED +" = 0";
         return db.rawQuery(mySql, null);
     }
 }
