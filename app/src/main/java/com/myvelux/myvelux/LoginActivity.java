@@ -335,10 +335,11 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             loginDataBaseAdapter=loginDataBaseAdapter.open();
 
             // fetch the Password form database for respective user name
-            User userAdmin=loginDataBaseAdapter.getSinlgeEntry("admin");
+            User userAdmin=loginDataBaseAdapter.findAllValidUser();
             User userExist=loginDataBaseAdapter.getSinlgeEntry(mEmail);
 
             if(userAdmin == null){
+                loginDataBaseAdapter.deleteEntry("admin");
                 User user = new User();
                 user.setUserName("admin");
                 user.setPassword("admin");

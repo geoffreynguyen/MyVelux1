@@ -156,9 +156,20 @@ public class LoginDataBaseAdapter
         return db.rawQuery(mySql, null);
     }
 
-    public Cursor findUserNotAdmin(){
-        String mySql = " SELECT * FROM "+TABLE_LOGIN+" WHERE "+COL_ADMIN+" = 0";
-        return db.rawQuery(mySql, null);
+    public User findAllValidUser(){
+        Cursor cursor=db.query(TABLE_LOGIN, null, COL_DELETED + "=?", new String[]{"0"}, null, null, null);
+        if(cursor.getCount()<1) // UserName Not Exist
+        {
+            cursor.close();
+            return null;
+        }
+        cursor.moveToFirst();
+        User user = new User();
+        user.setPassword(cursor.getString(cursor.getColumnIndex(COL_PASSWORD)));
+        user.setIsAdmin(cursor.getInt(cursor.getColumnIndex(COL_ADMIN)));
+        user.setUserName(cursor.getString(cursor.getColumnIndex(COL_USERNAME)));
+        cursor.close();
+        return user;
     }
 
     public Cursor findUserCursor(int idUser)

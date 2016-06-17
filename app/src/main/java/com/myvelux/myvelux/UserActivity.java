@@ -105,7 +105,7 @@ public class UserActivity extends BaseActivity {
                                 Toast.makeText(getBaseContext(), "Utilisateur supprimé", Toast.LENGTH_SHORT).show();
                             }
                         });
-                    }else{
+                    }else if  (mapItem.get("deleted").length() != 0){
                         adb.setNeutralButton("Activer", new AlertDialog.OnClickListener() {
                             public void onClick(DialogInterface dialog, int which) {
                                 todoItems.get(position).put("deleted","");
