@@ -18,7 +18,7 @@ import java.util.ArrayList;
 
 public class ActionActivity extends BaseActivity {
 
-    private Reservation resa;
+    private Commande com;
     private String action = "";
     private EditText actionPrice;
     RadioGroup radioGroup;
@@ -33,14 +33,13 @@ public class ActionActivity extends BaseActivity {
         radioGroup = (RadioGroup) findViewById(R.id.radioGroup);
         actionPrice = (EditText) findViewById(R.id.costs);
         errorActionPrice = (TextInputLayout) findViewById(R.id.error_actionPrice);
-        resa = (Reservation) getIntent().getSerializableExtra("resa");
-
-        if(!resa.getCommande().getActionPrice().equals("") && !resa.getCommande().getAction().equals("")){
-            actionPrice.setText(resa.getCommande().getActionPrice());
-            action = resa.getCommande().getAction();
-            if(resa.getCommande().getAction().equals("Remplacement")){
+        com = (Commande) getIntent().getSerializableExtra("com");
+        if(!com.getActionPrice().equals("") && !com.getAction().equals("")){
+            actionPrice.setText(com.getActionPrice());
+            action = com.getAction();
+            if(com.getAction().equals("Remplacement")){
                 radioGroup.check(R.id.radioButton);
-            }else if(resa.getCommande().getAction().equals("Création")){
+            }else if(com.getAction().equals("Création")){
                 radioGroup.check(R.id.radioButton2);
             }
         }
@@ -58,9 +57,9 @@ public class ActionActivity extends BaseActivity {
                             Toast.makeText(getBaseContext(), "Choisissez une action", Toast.LENGTH_SHORT).show();
                         }else{
                             Intent intent = new Intent(v.getContext(), RangeActivity.class);
-                            resa.getCommande().setAction(action);
-                            resa.getCommande().setActionPrice(actionPrice.getText().toString());
-                            intent.putExtra("resa", resa);
+                            com.setAction(action);
+                            com.setActionPrice(actionPrice.getText().toString());
+                            intent.putExtra("com", com);
                             startActivity(intent);
 
                         }
@@ -94,12 +93,6 @@ public class ActionActivity extends BaseActivity {
                     action = ((RadioButton) view).getText().toString();
                 break;
         }
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu, menu);
-        return true;
     }
 
 }

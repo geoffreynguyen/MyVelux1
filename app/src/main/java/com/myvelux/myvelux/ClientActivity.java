@@ -1,30 +1,22 @@
 package com.myvelux.myvelux;
 
-import android.content.Context;
+
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
-import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
 import android.widget.Toast;
-
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.regex.Pattern;
-import static java.lang.Class.forName;
 
-public class ClientActivity extends AppCompatActivity {
+
+public class ClientActivity extends BaseActivity {
 
     ClientDataBaseAdapter clientDataBaseAdapter;
 
@@ -43,7 +35,7 @@ public class ClientActivity extends AppCompatActivity {
         final ArrayList<HashMap<String, String>> todoItems = new ArrayList<>();
         HashMap<String, String> hashmap=new HashMap<>();
 
-        Cursor c = clientDataBaseAdapter.findAll();
+        Cursor c = clientDataBaseAdapter.findAllValidClients();
         if (c.moveToFirst())
         {
             do{
@@ -79,6 +71,10 @@ public class ClientActivity extends AppCompatActivity {
                             SharedPrefManager.setIdClient(Integer.parseInt(mapItem.get("id")));
                             SharedPrefManager.StoreToPref();
                             Toast.makeText(getBaseContext(), "Client selectionné : "+mapItem.get("firstName"), Toast.LENGTH_SHORT).show();
+                            Intent intent = new Intent(getApplicationContext(), FinalChoiceActivity.class);
+                            startActivity(intent);
+                            finish();
+
                         }
                     });
 
@@ -96,7 +92,6 @@ public class ClientActivity extends AppCompatActivity {
                             todoItems.remove(position);
                             mSchedule.notifyDataSetChanged();
                             SharedPrefManager.DeleteSingleEntryFromPref("idClient");
-                            SharedPrefManager.StoreToPref();
                             clientDataBaseAdapter.deleteClientById(Integer.parseInt(mapItem.get("id")));
                             Toast.makeText(getBaseContext(), "Client supprimé", Toast.LENGTH_SHORT).show();
                         }
@@ -116,9 +111,18 @@ public class ClientActivity extends AppCompatActivity {
                 public void onClick(View v) {
                     Intent intent = new Intent(v.getContext(), ManageClient.class);
                     startActivity(intent);
+                    finish();
                 }
             });
         }
+    }
+
+    @Override
+    public void onBackPressed()
+    {
+        Intent intent = new Intent(getApplicationContext(), FinalChoiceActivity.class);
+        startActivity(intent);
+        finish();
     }
 
 }

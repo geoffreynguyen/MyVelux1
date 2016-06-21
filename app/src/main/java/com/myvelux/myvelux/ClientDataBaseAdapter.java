@@ -9,7 +9,7 @@ import android.database.sqlite.SQLiteDatabase;
 public class ClientDataBaseAdapter {
 
     static final String DATABASE_NAME = "MyVelux.db";
-    static final int DATABASE_VERSION = 3;
+    static final int DATABASE_VERSION = 6;
     static final String TABLE_CLIENTS = "CLIENT";
     // Client Table Columns names
 
@@ -22,6 +22,7 @@ public class ClientDataBaseAdapter {
     private static final String COL_LANDLINE = "LANDLINE";
     private static final String COL_MOBILE = "MOBILE";
     private static final String COL_EMAIL = "EMAIL";
+    private static final String COL_DELETED = "DELETED";
     private static final String COL_DATE_CREATE = "DATE";
 
     // SQL Statement to create a new database.
@@ -35,6 +36,7 @@ public class ClientDataBaseAdapter {
             COL_LANDLINE    + " TEXT," +
             COL_MOBILE      + " TEXT," +
             COL_EMAIL       + " TEXT," +
+            COL_DELETED     + " INT DEFAULT 0," +
             COL_DATE_CREATE        + " INT);";
     // Variable to hold the database instance
     public  SQLiteDatabase db;
@@ -63,7 +65,7 @@ public class ClientDataBaseAdapter {
         return db;
     }
 
-    public void insertEntry(Client client)
+    public long insertEntry(Client client)
     {
         ContentValues values = new ContentValues();
         // Assign values for each row.
@@ -78,8 +80,9 @@ public class ClientDataBaseAdapter {
         values.put(COL_DATE_CREATE, System.currentTimeMillis());
 
         // Insert the row into your table
-        db.insert(TABLE_CLIENTS, null, values);
-        ///Toast.makeText(context, "Reminder Is Successfully Saved", Toast.LENGTH_LONG).show();
+        long id = db.insert(TABLE_CLIENTS, null, values);
+        db.close(); // Closing database connection
+        return id;
     }
     public int deleteEntry(String UserName)
     {
@@ -93,9 +96,13 @@ public class ClientDataBaseAdapter {
 
     public int deleteClientById(int idClient)
     {
+        // Define the updated row content.
+        ContentValues updatedValues = new ContentValues();
+
+        updatedValues.put(COL_DELETED, 1);
         //String id=String.valueOf(ID);
         String where = COL_ID_CLIENT+"=?";
-        int numberOFEntriesDeleted= db.delete(TABLE_CLIENTS, where, new String[]{String.valueOf(idClient)}) ;
+        int numberOFEntriesDeleted= db.update(TABLE_CLIENTS,updatedValues, where, new String[]{String.valueOf(idClient)}) ;
         // Toast.makeText(context, "Number fo Entry Deleted Successfully : "+numberOFEntriesDeleted, Toast.LENGTH_LONG).show();
         return numberOFEntriesDeleted;
     }
@@ -149,6 +156,11 @@ public class ClientDataBaseAdapter {
 
         String where = COL_ID_CLIENT+"= ?";
         db.update(TABLE_CLIENTS,updatedValues, where, new String[]{client.getId()});
+    }
+
+    public Cursor findAllValidClients(){
+        String mySql = " SELECT * FROM "+TABLE_CLIENTS+" WHERE "+COL_DELETED+" = 0";
+        return db.rawQuery(mySql, null);
     }
 
     public Cursor findAll(){

@@ -3,6 +3,7 @@
     <string name="title_activity_login">Connexion</string>
 
     <string name="menu_client_detail">Détails du client</string>
+    <string name="menu_user_detail">Gérer les utilisateurs</string>
     <string name="menu_logout">Se déconnecter</string>
 
     <!-- Strings related to login -->

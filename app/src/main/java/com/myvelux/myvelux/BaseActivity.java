@@ -11,21 +11,19 @@ public class BaseActivity extends AppCompatActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu, menu);
+        getMenuInflater().inflate(R.menu.menu_logout, menu);
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            case R.id.menu_client_detail:
-                Intent intent = new Intent(getApplicationContext(), ClientActivity.class);
-                startActivity(intent);
-                return true;
             case R.id.menu_logout:
                 SharedPrefManager.DeleteAllEntriesFromPref(); // all values are loaded into corresponding variables of SharedPrefManager class
+                SharedPrefManager.StoreToPref();
                 Intent intentLogin = new Intent(getApplicationContext(), LoginActivity.class);
                 startActivity(intentLogin);
+                finish();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);

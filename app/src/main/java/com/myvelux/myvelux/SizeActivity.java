@@ -10,7 +10,7 @@ import android.widget.Button;
 
 public class SizeActivity extends BaseActivity {
 
-    private Reservation resa;
+    private Commande com;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -18,7 +18,8 @@ public class SizeActivity extends BaseActivity {
         setContentView(R.layout.activity_size);
         setTitle("Taille");
 
-        resa = (Reservation) getIntent().getSerializableExtra("resa");
+        com = (Commande) getIntent().getSerializableExtra("com");
+
         Button btnNextSize= (Button) findViewById(R.id.btnNextSize);
         if (btnNextSize != null) {
             btnNextSize.setOnClickListener(new View.OnClickListener() {
@@ -26,8 +27,8 @@ public class SizeActivity extends BaseActivity {
                 public void onClick(View v) {
                     // start new activity
                     Intent intent = new Intent(v.getContext(), FittingActivity.class);
-                    resa.getCommande().setSize("70 x 60");
-                    intent.putExtra("resa",resa);
+                    com.setSize("70 x 60");
+                    intent.putExtra("com",com);
                     startActivity(intent);
                 }
             });

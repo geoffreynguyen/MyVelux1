@@ -22,6 +22,15 @@
         <TextView android:id="@+id/idClientListView"
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
+            android:visibility="gone"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            />
+
+        <TextView android:id="@+id/deleted"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:textColor="@color/colorRed"
             android:textSize="18sp"
             android:textStyle="bold"
             />

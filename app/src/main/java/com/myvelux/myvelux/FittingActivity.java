@@ -11,7 +11,8 @@ import android.widget.Button;
 
 public class FittingActivity extends BaseActivity {
 
-    private Reservation resa;
+    private Commande com;
+    CommandeDataBaseAdapter commandeDataBaseAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -19,16 +20,23 @@ public class FittingActivity extends BaseActivity {
         setContentView(R.layout.activity_fitting);
         setTitle("Raccord");
 
-        resa = (Reservation) getIntent().getSerializableExtra("resa");
+        commandeDataBaseAdapter = new CommandeDataBaseAdapter(this);
+        commandeDataBaseAdapter = commandeDataBaseAdapter.open();
+
+        com = (Commande) getIntent().getSerializableExtra("com");
+
         Button btnNextFitting = (Button) findViewById(R.id.btnNextFitting);
 
         if(btnNextFitting != null) {
             btnNextFitting.setOnClickListener(new View.OnClickListener(){
                 @Override
                 public void onClick(View v) {
+
                     Intent intent = new Intent(v.getContext(), FinalChoiceActivity.class);
-                    resa.getCommande().setFitting("EDW");
-                    intent.putExtra("resa",resa);
+                    com.setFitting("EDW");
+                    com.setIdClient(String.valueOf(SharedPrefManager.getIdClient()));
+                    commandeDataBaseAdapter.insertEntry(com);
+                    intent.putExtra("com",com);
                     startActivity(intent);
                 }
             });

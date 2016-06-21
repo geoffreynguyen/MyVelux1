@@ -10,7 +10,7 @@ import android.widget.Button;
 
 public class TypeActivity extends BaseActivity {
 
-    private Reservation resa;
+    private Commande com;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -19,15 +19,17 @@ public class TypeActivity extends BaseActivity {
         setTitle("Matériaux");
 
         Button btnNextType= (Button) findViewById(R.id.btnNextType);
-        resa = (Reservation) getIntent().getSerializableExtra("resa");
+
+        com = (Commande) getIntent().getSerializableExtra("com");
+
         if (btnNextType != null) {
             btnNextType.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     // start new activity
                     Intent intent = new Intent(v.getContext(), VersionActivity.class);
-                    resa.getCommande().setType("Bois");
-                    intent.putExtra("resa",resa);
+                    com.setType("Bois");
+                    intent.putExtra("com",com);
                     startActivity(intent);
                 }
             });
