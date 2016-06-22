@@ -20,7 +20,7 @@ public class DataBaseHelper extends SQLiteOpenHelper
         _db.execSQL(LoginDataBaseAdapter.DATABASE_CREATE);
         _db.execSQL(ClientDataBaseAdapter.DATABASE_CREATE);
         _db.execSQL(CommandeDataBaseAdapter.DATABASE_COMMANDS);
-
+        _db.execSQL(ProduitDataBaseAdapter.DATABASE_PRODUCTS);
     }
     // Called when there is a database version mismatch meaning that the version
     // of the database on disk needs to be upgraded to the current version.
@@ -37,8 +37,8 @@ public class DataBaseHelper extends SQLiteOpenHelper
         _db.execSQL("DROP TABLE IF EXISTS " + LoginDataBaseAdapter.TABLE_LOGIN);
         _db.execSQL("DROP TABLE IF EXISTS " + ClientDataBaseAdapter.TABLE_CLIENTS);
         _db.execSQL("DROP TABLE IF EXISTS " + CommandeDataBaseAdapter.TABLE_COMMANDS);
+        _db.execSQL("DROP TABLE IF EXISTS " + ProduitDataBaseAdapter.TABLE_PRODUCTS);
         // Create a new one.
         onCreate(_db);
     }
-
 }

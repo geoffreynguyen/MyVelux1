@@ -20,7 +20,7 @@ import java.util.Calendar;
 
 public class MyVeluxPDF extends AppCompatActivity {
 
-    String fname;
+    String fname = "devis";
     EditText fnameread;
     Button newClient, read;
     TextView filecon;
@@ -33,7 +33,7 @@ public class MyVeluxPDF extends AppCompatActivity {
         this.verifyStoragePermissions(this);
 
         resa = (Reservation) getIntent().getSerializableExtra("resa");
-
+        //resa = (Reservation) getIntent().getExtras().getSerializable("resa");
         Calendar c = Calendar.getInstance();
         System.out.println("Current time => " + c.getTime());
         SimpleDateFormat df = new SimpleDateFormat("dd-MM-yyyy");
@@ -41,7 +41,9 @@ public class MyVeluxPDF extends AppCompatActivity {
 
 
         fnameread = (EditText) findViewById(R.id.fnameread);
-        fname = formattedDate + "-" + resa.getClient().getLastName();
+
+       // fname = formattedDate + "-"+ resa.getCommande().toString();
+
         newClient = (Button) findViewById(R.id.btnNewClient);
         read = (Button) findViewById(R.id.btnread);
         filecon = (TextView) findViewById(R.id.filecon);
@@ -72,7 +74,7 @@ public class MyVeluxPDF extends AppCompatActivity {
                 // TODO Auto-generated method stub
                 String readfilename = fnameread.getText().toString();
                 GeneratorPDF fop = new GeneratorPDF();
-                String text = fop.read(readfilename);
+                String text = fop.read(fname/*readfilename*/);
                 if (text != null) {
                     filecon.setText(text);
                 } else {

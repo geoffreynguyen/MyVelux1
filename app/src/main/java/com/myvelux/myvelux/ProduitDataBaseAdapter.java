@@ -33,7 +33,7 @@ public class ProduitDataBaseAdapter
     private static final String COL_ISOLEMENT_COEFF = "Coef isolation thermique hiver";
     private static final String COL_WINDOW_AREA = "surface de baie";
 
-    static final String CREATE_TABLE_PRODUCTS = "CREATE TABLE " + TABLE_PRODUCTS + "(" +
+    static final String DATABASE_PRODUCTS = "CREATE TABLE " + TABLE_PRODUCTS + "(" +
             COL_ID_PRODUCT + " INTEGER PRIMARY KEY AUTOINCREMENT," +
             COL_FAMILLY_PRODUCT + " TEXT," +
             COL_RANGE_PRODUCT   + " TEXT," +
@@ -176,5 +176,3 @@ public class ProduitDataBaseAdapter
         return db.rawQuery(mySql, null);
     }
 }
-
-
