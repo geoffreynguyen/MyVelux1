@@ -2,8 +2,9 @@
     <string name="app_name">MyVelux</string>
     <string name="title_activity_login">Connexion</string>
 
-    <string name="menu_client_detail">Détails du client</string>
+    <string name="menu_client_detail">Gérer les clients</string>
     <string name="menu_user_detail">Gérer les utilisateurs</string>
+    <string name="menu_import_product">Importer les  produits</string>
     <string name="menu_logout">Se déconnecter</string>
 
     <!-- Strings related to login -->

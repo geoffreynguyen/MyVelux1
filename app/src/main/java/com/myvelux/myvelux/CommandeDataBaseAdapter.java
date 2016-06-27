@@ -12,7 +12,7 @@ import android.database.sqlite.SQLiteDatabase;
 public class CommandeDataBaseAdapter {
 
     static final String DATABASE_NAME = "MyVelux.db";
-    static final int DATABASE_VERSION = 6;
+    static final int DATABASE_VERSION = 7;
     static final String TABLE_COMMANDS = "COMMANDE";
     // Client Table Columns names
 

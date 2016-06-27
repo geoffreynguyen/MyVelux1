@@ -9,7 +9,7 @@ import android.database.sqlite.SQLiteDatabase;
 public class LoginDataBaseAdapter
 {
     static final String DATABASE_NAME = "MyVelux.db";
-    static final int DATABASE_VERSION = 6;
+    static final int DATABASE_VERSION = 7;
     static final String TABLE_LOGIN = "LOGIN";
 
     private static final String COL_ID_LOGIN = "ID";

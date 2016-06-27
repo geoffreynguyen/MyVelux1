@@ -1,8 +1,12 @@
 package com.myvelux.myvelux;
 
+import android.content.ContentValues;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.res.AssetManager;
 import android.database.Cursor;
+import android.os.Environment;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -17,16 +21,27 @@ import android.widget.ListView;
 import android.widget.SimpleAdapter;
 import android.widget.Toast;
 
+import java.io.BufferedReader;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
+import java.util.StringTokenizer;
 
 public class FinalChoiceActivity extends BaseActivity {
 
     private Commande com;
     private ListView lv;
     static boolean isAdmin;
+
+    Context ctx;
     CommandeDataBaseAdapter commandeDataBaseAdapter;
     LoginDataBaseAdapter loginDataBaseAdapter;
+    ProductDataBaseAdapter productDataBaseAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,6 +63,8 @@ public class FinalChoiceActivity extends BaseActivity {
         commandeDataBaseAdapter = commandeDataBaseAdapter.open();
         loginDataBaseAdapter = new LoginDataBaseAdapter(this);
         loginDataBaseAdapter = loginDataBaseAdapter.open();
+        productDataBaseAdapter = new ProductDataBaseAdapter(this);
+
 
         final ArrayList<HashMap<String, String>> todoItems = new ArrayList<>();
         HashMap<String, String> hashmap=new HashMap<>();
@@ -174,6 +191,7 @@ public class FinalChoiceActivity extends BaseActivity {
         getMenuInflater().inflate(R.menu.menu, menu);
         if(!isAdmin) {
             menu.findItem(R.id.menu_user_detail).setTitle("Mon compte");
+            menu.findItem(R.id.menu_import_product).setVisible(false);
         }
         return true;
     }
@@ -189,7 +207,6 @@ public class FinalChoiceActivity extends BaseActivity {
             case R.id.menu_user_detail:
 
                 if(!isAdmin){
-                    item.setTitle("Mon compte");
                     Intent intentUser = new Intent(getApplicationContext(), ManageUser.class);
                     intentUser.putExtra("idUser", (SharedPrefManager.getIdLogin()));
                     intentUser.putExtra("isAdmin", isAdmin);
@@ -201,10 +218,41 @@ public class FinalChoiceActivity extends BaseActivity {
                     finish();
                 }
                 return true;
+
+            case R.id.menu_import_product:
+                importProduct();
+                return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
     }
 
+    public void importProduct(){
+
+        productDataBaseAdapter = productDataBaseAdapter.open();
+        FileReader file = null;
+        try {
+            file = new FileReader(Environment.getExternalStorageDirectory().getPath()+"/ProduitsCSV.csv");
+            BufferedReader buffer = new BufferedReader(file);
+            String line = null;
+            String value = null;
+            ArrayList<String> dataRow = null;
+            StringTokenizer token;
+            while((line=buffer.readLine()) != null) {
+                dataRow = new ArrayList<String>();
+                token = new StringTokenizer(line, ";");
+                while (token.hasMoreElements()) {
+                    value = (String) token.nextElement();
+                    dataRow.add(value);
+                }
+                productDataBaseAdapter.insertRowCSV(dataRow);
+            }
+            productDataBaseAdapter.getDatabaseInstance().close();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 
 }

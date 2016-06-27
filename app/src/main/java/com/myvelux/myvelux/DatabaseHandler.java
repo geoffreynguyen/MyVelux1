@@ -311,20 +311,6 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         values.put(COL_RANGE_PRODUCT, produit.getCOL_RANGE_PRODUCT() );
         values.put(COL_TYPE_PRODUCT, produit.getCOL_TYPE_PRODUCT() );
         values.put(COL_VERSION_PRODUCT, produit.getCOL_VERSION_PRODUCT());
-        values.put(COL_LIBEL, produit.getCOL_LIBEL());
-        values.put(COL_CODE, produit.getCOL_CODE());
-        values.put(COL_AREA, produit.getCOL_AREA());
-        values.put(COL_REFERENCE, produit.getCOL_REFERENCE());
-        values.put(COL_COMBINATION_PRODUCT, produit.getCOL_COMBINATION_PRODUCT());
-        values.put(COL_COMMENT, produit.getCOL_COMMENT());
-        values.put(COL_PRICE_HT, produit.getCOL_PRICE_HT());
-        values.put(COL_PRICE_TTC, produit.getCOL_PRICE_TTC());
-        values.put(COL_WEEK_DELAY, produit.getCOL_WEEK_DELAY());
-        values.put(COL_WINDOW_WIDTH , produit.getCOL_WINDOW_WIDTH());
-        values.put(COL_WINDOW_HEIGHT, produit.getCOL_WINDOW_HEIGHT());
-        values.put(COL_ISOLEMENT_COEFF, produit.getCOL_ISOLEMENT_COEFF());
-        values.put(COL_WINDOW_AREA, produit.getCOL_AREA());
-
         // Inserting Row
         long id = db.insert(TABLE_PRODUCTS, null, values);
         db.close(); // Closing database connection
@@ -362,9 +348,9 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         if (cursor != null)
             cursor.moveToFirst();
 
-        Produit prod = new Produit(cursor.getString(0), cursor.getString(1), cursor.getString(2), cursor.getString(3), cursor.getString(4), cursor.getString(5), cursor.getString(6), cursor.getString(7), cursor.getString(8), cursor.getString(9), cursor.getString(10), cursor.getString(11), cursor.getString(12), cursor.getString(13), cursor.getString(14), cursor.getString(15), cursor.getString(16), cursor.getString(17) );
+        //Produit prod = new Produit(cursor.getString(0), cursor.getString(1), cursor.getString(2), cursor.getString(3), cursor.getString(4), cursor.getString(5), cursor.getString(6), cursor.getString(7), cursor.getString(8), cursor.getString(9), cursor.getString(10), cursor.getString(11), cursor.getString(12), cursor.getString(13), cursor.getString(14), cursor.getString(15), cursor.getString(16), cursor.getString(17) );
         cursor.close();
-        return prod;
+        return null;
     }
 
     // Updating single Produit
@@ -377,20 +363,6 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         values.put(COL_RANGE_PRODUCT, produit.getCOL_RANGE_PRODUCT() );
         values.put(COL_TYPE_PRODUCT, produit.getCOL_TYPE_PRODUCT() );
         values.put(COL_VERSION_PRODUCT, produit.getCOL_VERSION_PRODUCT());
-        values.put(COL_LIBEL, produit.getCOL_LIBEL());
-        values.put(COL_CODE, produit.getCOL_CODE());
-        values.put(COL_AREA, produit.getCOL_AREA());
-        values.put(COL_REFERENCE, produit.getCOL_REFERENCE());
-        values.put(COL_COMBINATION_PRODUCT, produit.getCOL_COMBINATION_PRODUCT());
-        values.put(COL_COMMENT, produit.getCOL_COMMENT());
-        values.put(COL_PRICE_HT, produit.getCOL_PRICE_HT());
-        values.put(COL_PRICE_TTC, produit.getCOL_PRICE_TTC());
-        values.put(COL_WEEK_DELAY, produit.getCOL_WEEK_DELAY());
-        values.put(COL_WINDOW_WIDTH , produit.getCOL_WINDOW_WIDTH());
-        values.put(COL_WINDOW_HEIGHT, produit.getCOL_WINDOW_HEIGHT());
-        values.put(COL_ISOLEMENT_COEFF, produit.getCOL_ISOLEMENT_COEFF());
-        values.put(COL_WINDOW_AREA, produit.getCOL_AREA());
-/*        values.put(COL_DATE, System.currentTimeMillis()); */
 
         // updating row
         return db.update(TABLE_PRODUCTS, values, COL_ID_PRODUCT + " = ?", new String[] { String.valueOf(produit.getCOL_ID_PRODUCT()) });
