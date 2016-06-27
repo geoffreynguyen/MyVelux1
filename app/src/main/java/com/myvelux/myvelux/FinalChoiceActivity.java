@@ -34,6 +34,7 @@ import java.util.StringTokenizer;
 
 public class FinalChoiceActivity extends BaseActivity {
 
+    private Reservation resa;
     private Commande com;
     private ListView lv;
     static boolean isAdmin;
@@ -150,7 +151,12 @@ public class FinalChoiceActivity extends BaseActivity {
                     @Override
                     public void onClick(View v) {
                         Intent intent = new Intent(v.getContext(), MyVeluxPDF.class);
-                        intent.putExtra("com", com);
+                        /* ************** changer avec le vrai client  *************** */
+                        resa = new Reservation();
+                        resa.setCommande(com);
+                        resa.setClient(new Client("1", "Dumou", "Valou", "Chezlui", "666666", "CItédlaMort", "0666666666", "0456642312", "dumou.valou@yahou.nigeria"));
+                        /* ************** *********** *************** */
+                        intent.putExtra("resa",resa);
                         startActivity(intent);
                     }
                 });

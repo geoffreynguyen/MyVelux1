@@ -49,7 +49,7 @@ public class CommandeDataBaseAdapter {
     // Database open/upgrade helper
     private DataBaseHelper dbHelper;
 
-    public  CommandeDataBaseAdapter(Context _context)
+    public CommandeDataBaseAdapter(Context _context)
     {
         context = _context;
         dbHelper = new DataBaseHelper(context, DATABASE_NAME, null, DATABASE_VERSION);
