@@ -149,6 +149,12 @@ public class ProductDataBaseAdapter {
         return numberOFEntriesDeleted;
     }
 
+    public int deleteProducts()
+    {
+        db.delete(TABLE_PRODUCT, null, null) ;
+        return 1;
+    }
+
     public Produit getSinlgeEntry(int idProduct)
     {
         Cursor cursor=db.query(TABLE_PRODUCT, null, COL_ID_PRODUCT + "=?", new String[]{String.valueOf(idProduct)}, null, null, null);
@@ -259,9 +265,35 @@ public class ProductDataBaseAdapter {
         return sizes;
     }
 
-    public ArrayList<String> getProductFitting(String action, String range, String type, String version, String size)
+    public String getProductRefVelux(String action, String range, String type, String version, String size)
     {
-        ArrayList<String> fittings = new ArrayList<>();
+        ArrayList<String> sizes = new ArrayList<>();
+        String mySql = " SELECT * FROM "+ TABLE_PRODUCT +
+                " WHERE "+ COL_RANGE_PRODUCT+" LIKE '%" + range + "%'AND " +
+                COL_TYPE_PRODUCT+" LIKE '%" + type + "%' AND " +
+                COL_VERSION_PRODUCT+" LIKE '%" + version + "%' AND " +
+                COL_DIMENSION+" LIKE '%" + size + "%'";
+
+        Cursor cursor = db.rawQuery(mySql, null);
+
+        if(cursor.getCount()<1)
+        {
+            cursor.close();
+            return null;
+
+        }
+        cursor.moveToFirst();
+        String refArticle = cursor.getString(cursor.getColumnIndex(COL_REF_ARTICLE));
+
+        cursor.close();
+        return refArticle;
+    }
+
+    public ArrayList<HashMap<String, String>> getProductFitting(String action, String range, String type, String version, String size)
+    {
+        HashMap<String, String> fittings = new HashMap<>();
+        final ArrayList<HashMap<String, String>> todoItems = new ArrayList<>();
+
         String mySql = " SELECT * FROM "+ TABLE_PRODUCT +
                 " WHERE "+ COL_RANGE_PRODUCT+" LIKE '%" + range + "%'AND " +
                 COL_TYPE_PRODUCT+" LIKE '%" + type + "%' AND " +
@@ -298,12 +330,16 @@ public class ProductDataBaseAdapter {
         }else if (cursor2.moveToFirst())
         {
             do{
-                String fitting = cursor2.getString(cursor.getColumnIndex(COL_LIBEL_ARTICLE));
-                fittings.add(fitting.replace("\"",""));
+                String fittingLibel = cursor2.getString(cursor.getColumnIndex(COL_LIBEL_ARTICLE));
+                String fittingRef = cursor2.getString(cursor.getColumnIndex(COL_REF_ARTICLE));
+                fittings.put("libel_article",fittingLibel.replace("\"",""));
+                fittings.put("ref_article", fittingRef.replace("\"",""));
+                todoItems.add(fittings);
+                fittings = new HashMap<>();
             }while (cursor2.moveToNext());
         }
 
-        return fittings;
+        return todoItems;
     }
 
     public int  updateEntry(Produit product)

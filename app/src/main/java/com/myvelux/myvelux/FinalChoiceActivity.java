@@ -235,6 +235,7 @@ public class FinalChoiceActivity extends BaseActivity {
     public void importProduct(){
 
         productDataBaseAdapter = productDataBaseAdapter.open();
+        productDataBaseAdapter.deleteProducts();
         FileReader file = null;
         try {
             file = new FileReader(Environment.getExternalStorageDirectory().getPath()+"/ProduitsCSV.csv");

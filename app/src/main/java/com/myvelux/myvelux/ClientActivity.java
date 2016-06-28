@@ -41,6 +41,11 @@ public class ClientActivity extends BaseActivity {
             do{
                 hashmap.put("firstName",c.getString(1));
                 hashmap.put("id",c.getString(0));
+                if(c.getString(9).equals("1")) {
+                    hashmap.put("deleted", "Désactivé");
+                }else {
+                    hashmap.put("deleted", "");
+                }
                 todoItems.add(hashmap);
                 hashmap = new HashMap<>();
             }while (c.moveToNext());
@@ -52,7 +57,7 @@ public class ClientActivity extends BaseActivity {
         {
             //Create Simple adapter (make the list)
             final SimpleAdapter mSchedule = new SimpleAdapter (this.getBaseContext(), todoItems, R.layout.affichage_client,
-                    new String[] {"firstName", "id"}, new int[] {R.id.firstNameListView, R.id.idClientListView});
+                    new String[] {"firstName", "deleted", "id"}, new int[] {R.id.firstNameListView, R.id.deleted});
 
             lv.setAdapter(mSchedule);
 
@@ -87,15 +92,28 @@ public class ClientActivity extends BaseActivity {
 
                         }
                     });
-                    adb.setPositiveButton("Supprimer", new AlertDialog.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int which) {
-                            todoItems.remove(position);
-                            mSchedule.notifyDataSetChanged();
-                            SharedPrefManager.DeleteSingleEntryFromPref("idClient");
-                            clientDataBaseAdapter.deleteClientById(Integer.parseInt(mapItem.get("id")));
-                            Toast.makeText(getBaseContext(), "Client supprimé", Toast.LENGTH_SHORT).show();
-                        }
-                    });
+                    if(mapItem.get("deleted").length() == 0) {
+                        adb.setPositiveButton("Supprimer", new AlertDialog.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+                                todoItems.get(position).put("deleted","Désactivé");
+                                mSchedule.notifyDataSetChanged();
+                                if(SharedPrefManager.getIdClient()==Integer.parseInt(mapItem.get("id"))) {
+                                    SharedPrefManager.DeleteSingleEntryFromPref("idClient");
+                                }
+                                clientDataBaseAdapter.deleteClientById(Integer.parseInt(mapItem.get("id")));
+                                Toast.makeText(getBaseContext(), "Client supprimé", Toast.LENGTH_SHORT).show();
+                            }
+                        });
+                    }else if  (mapItem.get("deleted").length() != 0){
+                        adb.setPositiveButton("Activer", new AlertDialog.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+                                todoItems.get(position).put("deleted","");
+                                mSchedule.notifyDataSetChanged();
+                                clientDataBaseAdapter.activateClientById(Integer.parseInt(mapItem.get("id")));
+                                Toast.makeText(getBaseContext(), "Client activé", Toast.LENGTH_SHORT).show();
+                            }
+                        });
+                    }
                     adb.show();
                 }
 

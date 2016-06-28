@@ -107,6 +107,20 @@ public class ClientDataBaseAdapter {
         return numberOFEntriesDeleted;
     }
 
+    public int activateClientById(int idClient)
+    {
+        // Define the updated row content.
+        ContentValues updatedValues = new ContentValues();
+        updatedValues.put(COL_DELETED, 0);
+
+
+        //String id=String.valueOf(ID);
+        String where = COL_ID_CLIENT+"=?";
+        int numberOFEntriesDeleted= db.update(TABLE_CLIENTS,updatedValues, where, new String[]{String.valueOf(idClient)}) ;
+        // Toast.makeText(context, "Number fo Entry Deleted Successfully : "+numberOFEntriesDeleted, Toast.LENGTH_LONG).show();
+        return numberOFEntriesDeleted;
+    }
+
     public Client getSinlgeEntry(int idClient)
     {
         Cursor cursor=db.query(TABLE_CLIENTS, null, COL_ID_CLIENT + "=?", new String[]{String.valueOf(idClient)}, null, null, null);

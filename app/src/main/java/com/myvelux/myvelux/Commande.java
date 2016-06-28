@@ -18,6 +18,8 @@ public class Commande implements Serializable {
     private String size;
     private String fitting;
     private String idClient;
+    private String refArticle;
+    private String refFitting;
 
     public Commande() {
         this.action = " ";
@@ -115,5 +117,21 @@ public class Commande implements Serializable {
 
     public void setIdClient(String idClient) {
         this.idClient = idClient;
+    }
+
+    public String getRefArticle() {
+        return refArticle;
+    }
+
+    public void setRefArticle(String refArticle) {
+        this.refArticle = refArticle;
+    }
+
+    public String getRefFitting() {
+        return refFitting;
+    }
+
+    public void setRefFitting(String refFitting) {
+        this.refFitting = refFitting;
     }
 }
