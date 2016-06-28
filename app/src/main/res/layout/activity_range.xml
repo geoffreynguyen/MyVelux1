@@ -22,14 +22,6 @@
             android:layout_height="wrap_content"
             android:id="@+id/listRange"
             android:layout_gravity="center_horizontal" />
-
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Suivant"
-            android:id="@+id/btnNextRange"
-            android:layout_gravity="center_horizontal"
-            android:onClick="btnNext"/>
     </LinearLayout>
 
 </RelativeLayout>

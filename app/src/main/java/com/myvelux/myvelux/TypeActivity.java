@@ -6,11 +6,19 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.ListView;
+
+import java.util.ArrayList;
 
 public class TypeActivity extends BaseActivity {
 
-    private Commande com;
+    static private Commande com;
+    ListView listTypes;
+    ArrayList<String> types;
+    ProductDataBaseAdapter productDataBaseAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -18,22 +26,26 @@ public class TypeActivity extends BaseActivity {
         setContentView(R.layout.activity_type);
         setTitle("Matériaux");
 
-        Button btnNextType= (Button) findViewById(R.id.btnNextType);
+        productDataBaseAdapter = new ProductDataBaseAdapter(this);
+        productDataBaseAdapter = productDataBaseAdapter.open();
 
         com = (Commande) getIntent().getSerializableExtra("com");
 
-        if (btnNextType != null) {
-            btnNextType.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    // start new activity
-                    Intent intent = new Intent(v.getContext(), VersionActivity.class);
-                    com.setType("Bois");
-                    intent.putExtra("com",com);
-                    startActivity(intent);
-                }
-            });
-        }
-    }
+        listTypes = (ListView)findViewById(R.id.listType);
+        types = productDataBaseAdapter.getProductType(com.getRange());
 
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,android.R.layout.simple_list_item_1, types);
+        listTypes.setAdapter(adapter);
+
+        listTypes.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            public void onItemClick(final AdapterView<?> parent, final View view,
+                                    final int position, long id) {
+                Intent intent = new Intent(view.getContext(), VersionActivity.class);
+                com.setType((String) listTypes.getItemAtPosition(position));
+                intent.putExtra("com",com);
+                startActivity(intent);
+            }
+        });
+
+    }
 }

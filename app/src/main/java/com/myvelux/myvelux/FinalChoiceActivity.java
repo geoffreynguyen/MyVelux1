@@ -39,7 +39,6 @@ public class FinalChoiceActivity extends BaseActivity {
     private ListView lv;
     static boolean isAdmin;
 
-    Context ctx;
     CommandeDataBaseAdapter commandeDataBaseAdapter;
     LoginDataBaseAdapter loginDataBaseAdapter;
     ProductDataBaseAdapter productDataBaseAdapter;

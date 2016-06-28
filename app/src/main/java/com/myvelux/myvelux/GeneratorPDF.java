@@ -77,7 +77,7 @@ public class GeneratorPDF {
             );
 
             document.add(title);
-           /* document.add(coordClient);
+           document.add(coordClient);
             document.add(coordEntrep);
             document.add(garantie);
             document.add(duree_paiement_delai);
@@ -91,13 +91,13 @@ public class GeneratorPDF {
             document.add(new Paragraph("\n"));
             document.add(createTableSignature());
 
-            Image image =Image.getInstance("sdcard/Dutoit.png");
+            /*Image image =Image.getInstance("sdcard/Dutoit.png");
             image.setWidthPercentage(15);
             document.add(image);
             Image image2 =Image.getInstance("sdcard/icoVelux.png");
             image2.setWidthPercentage(15);
-            document.add(image2);
-*/
+            document.add(image2);*/
+
             // step 5
             document.close();
 

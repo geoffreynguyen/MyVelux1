@@ -18,7 +18,7 @@ import java.util.ArrayList;
 
 public class RangeActivity extends BaseActivity {
 
-    private Commande com;
+    static private Commande com;
     ListView listRange;
     ArrayList<String> ranges;
 
@@ -43,6 +43,7 @@ public class RangeActivity extends BaseActivity {
         listRange.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             public void onItemClick(final AdapterView<?> parent, final View view,
                                     final int position, long id) {
+                com = (Commande) getIntent().getSerializableExtra("com");
                 Intent intent = new Intent(view.getContext(), TypeActivity.class);
                 com.setRange((String) listRange.getItemAtPosition(position));
                 intent.putExtra("com",com);

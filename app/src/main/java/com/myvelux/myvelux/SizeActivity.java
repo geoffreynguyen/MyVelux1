@@ -3,14 +3,24 @@ package com.myvelux.myvelux;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.ListView;
+
+import java.util.ArrayList;
+import java.util.Arrays;
 
 public class SizeActivity extends BaseActivity {
 
-    private Commande com;
+    static private Commande com;
+    ProductDataBaseAdapter productDataBaseAdapter;
+    ListView listSizes;
+    ArrayList<String> sizes;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -18,21 +28,26 @@ public class SizeActivity extends BaseActivity {
         setContentView(R.layout.activity_size);
         setTitle("Taille");
 
+        productDataBaseAdapter = new ProductDataBaseAdapter(this);
+        productDataBaseAdapter = productDataBaseAdapter.open();
+
         com = (Commande) getIntent().getSerializableExtra("com");
 
-        Button btnNextSize= (Button) findViewById(R.id.btnNextSize);
-        if (btnNextSize != null) {
-            btnNextSize.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    // start new activity
-                    Intent intent = new Intent(v.getContext(), FittingActivity.class);
-                    com.setSize("70 x 60");
-                    intent.putExtra("com",com);
-                    startActivity(intent);
-                }
-            });
-        }
+        listSizes = (ListView)findViewById(R.id.listSizes);
+        sizes = productDataBaseAdapter.getProductSize(com.getRange(), com.getType(), com.getVersion());
+
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,android.R.layout.simple_list_item_1, sizes);
+        listSizes.setAdapter(adapter);
+
+        listSizes.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            public void onItemClick(final AdapterView<?> parent, final View view,
+                                    final int position, long id) {
+                Intent intent = new Intent(view.getContext(), FittingActivity.class);
+                com.setSize((String) listSizes.getItemAtPosition(position));
+                intent.putExtra("com",com);
+                startActivity(intent);
+            }
+        });
     }
 
 }

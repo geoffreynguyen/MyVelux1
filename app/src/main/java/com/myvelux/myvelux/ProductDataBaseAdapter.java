@@ -5,8 +5,12 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
+import android.util.Log;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
 
 /**
  * Created by geoffrey on 17/06/16.
@@ -168,6 +172,138 @@ public class ProductDataBaseAdapter {
         prod.setCOL_PRICE_TTC(cursor.getString(cursor.getColumnIndex(COL_PRICE_TTC)));
         cursor.close();
         return prod;
+    }
+
+
+    public ArrayList<String> getProductType(String range)
+    {
+        ArrayList<String> types = new ArrayList<>();
+        String mySql = " SELECT * FROM "+ TABLE_PRODUCT +
+                " WHERE "+ COL_FAMILLY_PRODUCT + " LIKE '%FENETRES%' AND " +
+                COL_RANGE_PRODUCT+" LIKE '%" + range + "%'";
+
+        Cursor cursor = db.rawQuery(mySql, null);
+
+        if(cursor.getCount()<1)
+        {
+            cursor.close();
+            return null;
+        }else if (cursor.moveToFirst())
+        {
+            do{
+                String type = cursor.getString(cursor.getColumnIndex(COL_TYPE_PRODUCT));
+                type = type.replace("\"","");
+                if(!types.contains(type)){
+                    types.add(type);
+                }
+
+            }while (cursor.moveToNext());
+        }
+
+        cursor.close();
+        return types;
+    }
+    
+    public ArrayList<String> getProductVersion(String range, String type)
+    {
+        ArrayList<String> versions = new ArrayList<>();
+        String mySql = " SELECT * FROM "+ TABLE_PRODUCT +
+                " WHERE "+ COL_RANGE_PRODUCT+" LIKE '%" + range + "%'AND " +
+                COL_TYPE_PRODUCT+" LIKE '%" + type + "%'";
+
+        Cursor cursor = db.rawQuery(mySql, null);
+        
+        if(cursor.getCount()<1)
+        {
+            cursor.close();
+            return null;
+        }else if (cursor.moveToFirst())
+        {
+            do{
+                String version = cursor.getString(cursor.getColumnIndex(COL_VERSION_PRODUCT));
+                version = version.replace("\"","");
+                if(!versions.contains(version)){
+                    versions.add(version);
+                }
+
+            }while (cursor.moveToNext());
+        }
+        cursor.close();
+        return versions;
+    }
+
+    public ArrayList<String> getProductSize(String range, String type, String version)
+    {
+        ArrayList<String> sizes = new ArrayList<>();
+        String mySql = " SELECT * FROM "+ TABLE_PRODUCT +
+                " WHERE "+ COL_RANGE_PRODUCT+" LIKE '%" + range + "%'AND " +
+                COL_TYPE_PRODUCT+" LIKE '%" + type + "%' AND " +
+                COL_VERSION_PRODUCT+" LIKE '%" + version + "%'";
+
+        Cursor cursor = db.rawQuery(mySql, null);
+
+        if(cursor.getCount()<1)
+        {
+            cursor.close();
+            return null;
+
+        }else if (cursor.moveToFirst())
+        {
+            do{
+                String size = cursor.getString(cursor.getColumnIndex(COL_DIMENSION));
+                sizes.add(size.replace("\"",""));
+            }while (cursor.moveToNext());
+        }
+
+        cursor.close();
+        return sizes;
+    }
+
+    public ArrayList<String> getProductFitting(String action, String range, String type, String version, String size)
+    {
+        ArrayList<String> fittings = new ArrayList<>();
+        String mySql = " SELECT * FROM "+ TABLE_PRODUCT +
+                " WHERE "+ COL_RANGE_PRODUCT+" LIKE '%" + range + "%'AND " +
+                COL_TYPE_PRODUCT+" LIKE '%" + type + "%' AND " +
+                COL_VERSION_PRODUCT+" LIKE '%" + version + "%' AND " +
+                COL_DIMENSION+" LIKE '%" + size + "%'";
+
+        Cursor cursor = db.rawQuery(mySql, null);
+
+        if(cursor.getCount()<1)
+        {
+            cursor.close();
+            return null;
+
+        }
+        cursor.moveToFirst();
+        String refSize = cursor.getString(cursor.getColumnIndex(COL_REF_DIMENSION));
+
+        String getFitting = " SELECT * FROM "+ TABLE_PRODUCT +
+                " WHERE "+ COL_FAMILLY_PRODUCT + " LIKE '%RACCORDS%' AND " +
+                COL_REF_DIMENSION+" LIKE '%" + refSize.replace("\"","") + "%'";
+        if(action.equals("Création")){
+            getFitting += " AND " + COL_TYPE_PRODUCT+" IN ('\"EDL\"', '\"EDN\"', '\"EDW\"', '\"EDJ\"', '\"EDP\"')";
+        }else if(action.equals("Remplacement")){
+            getFitting += " AND " + COL_TYPE_PRODUCT+" IN ('\"EL\"', '\"EW\"')";
+        }
+
+        Cursor cursor2 = db.rawQuery(getFitting, null);
+
+        if(cursor2.getCount()<1)
+        {
+            cursor2.close();
+            return null;
+
+        }else if (cursor2.moveToFirst())
+        {
+            do{
+                String fitting = cursor2.getString(cursor.getColumnIndex(COL_LIBEL_ARTICLE));
+                fittings.add(fitting.replace("\"",""));
+            }while (cursor2.moveToNext());
+        }
+
+        return fittings;
     }
 
     public int  updateEntry(Produit product)

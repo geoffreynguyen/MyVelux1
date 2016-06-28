@@ -26,34 +26,16 @@
         <activity android:name=".ClientActivity" />
         <activity android:name=".RoomActivity" />
         <activity android:name=".ActionActivity">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value=".RoomActivity" />
         </activity>
         <activity android:name=".RangeActivity">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value=".ActionActivity" />
         </activity>
         <activity android:name=".TypeActivity">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value=".RangeActivity" />
         </activity>
         <activity android:name=".VersionActivity">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value=".TypeActivity" />
         </activity>
         <activity android:name=".SizeActivity">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value=".VersionActivity" />
         </activity>
         <activity android:name=".FittingActivity">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value=".SizeActivity" />
         </activity>
         <activity android:name=".MyVeluxPDF">
             <meta-data

@@ -7,12 +7,20 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.ListView;
+
+import java.util.ArrayList;
 
 public class FittingActivity extends BaseActivity {
 
-    private Commande com;
+    static private Commande com;
+    ProductDataBaseAdapter productDataBaseAdapter;
     CommandeDataBaseAdapter commandeDataBaseAdapter;
+    ListView listFitting;
+    ArrayList<String> fittings;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -20,28 +28,30 @@ public class FittingActivity extends BaseActivity {
         setContentView(R.layout.activity_fitting);
         setTitle("Raccord");
 
+        productDataBaseAdapter = new ProductDataBaseAdapter(this);
+        productDataBaseAdapter = productDataBaseAdapter.open();
         commandeDataBaseAdapter = new CommandeDataBaseAdapter(this);
         commandeDataBaseAdapter = commandeDataBaseAdapter.open();
 
         com = (Commande) getIntent().getSerializableExtra("com");
 
-        Button btnNextFitting = (Button) findViewById(R.id.btnNextFitting);
+        listFitting = (ListView)findViewById(R.id.listFitting);
+        fittings = productDataBaseAdapter.getProductFitting(com.getAction(), com.getRange(), com.getType(), com.getVersion(), com.getSize());
 
-        if(btnNextFitting != null) {
-            btnNextFitting.setOnClickListener(new View.OnClickListener(){
-                @Override
-                public void onClick(View v) {
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,android.R.layout.simple_list_item_1, fittings);
+        listFitting.setAdapter(adapter);
 
-                    Intent intent = new Intent(v.getContext(), FinalChoiceActivity.class);
-                    com.setFitting("EDW");
-                    com.setIdClient(String.valueOf(SharedPrefManager.getIdClient()));
-                    commandeDataBaseAdapter.insertEntry(com);
-                    intent.putExtra("com",com);
-                    startActivity(intent);
-                }
-            });
-        }
-
+        listFitting.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            public void onItemClick(final AdapterView<?> parent, final View view,
+                                    final int position, long id) {
+                Intent intent = new Intent(view.getContext(), FinalChoiceActivity.class);
+                com.setFitting((String) listFitting.getItemAtPosition(position));
+                com.setIdClient(String.valueOf(SharedPrefManager.getIdClient()));
+                commandeDataBaseAdapter.insertEntry(com);
+                intent.putExtra("com",com);
+                startActivity(intent);
+            }
+        });
     }
 
 }
