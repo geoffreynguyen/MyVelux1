@@ -7,18 +7,12 @@
     android:layout_gravity="center"
     tools:context="com.myvelux.myvelux.MyVeluxPDF">
 
-    <Button
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/btnNewClient"
-        android:text="Write File" />
-
     <EditText
         android:id="@+id/fnameread"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:hint="File Name"
-        android:text="20-05-2016" />
+        android:text="devis" />
 
     <Button
         android:layout_width="fill_parent"

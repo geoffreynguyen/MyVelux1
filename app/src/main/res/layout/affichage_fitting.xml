@@ -13,7 +13,7 @@
         android:layout_weight="1">
 
         <TextView android:id="@+id/libel_article"
-            android:layout_width="257dp"
+            android:layout_width="230dp"
             android:layout_height="fill_parent"
             android:textSize="18sp"
             android:textStyle="bold"

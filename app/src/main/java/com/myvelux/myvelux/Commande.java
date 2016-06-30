@@ -19,11 +19,17 @@ public class Commande implements Serializable {
     private String fitting;
     private String idClient;
     private String refArticle;
+    private String prixHTVelux;
+    private String prixTTCVelux;
     private String refFitting;
+    private String prixHTFitting;
+    private String prixTTCFitting;
+    private String update;
 
     public Commande() {
         this.action = " ";
         this.actionPrice = " ";
+        this.update = "false";
     }
 
     public Commande(String id, String room, String action, String actionPrice, String range, String type, String version, String size, String fitting, String idClient) {
@@ -134,4 +140,45 @@ public class Commande implements Serializable {
     public void setRefFitting(String refFitting) {
         this.refFitting = refFitting;
     }
+
+    public String getUpdate() {
+        return update;
+    }
+
+    public void setUpdate(String update) {
+        this.update = update;
+    }
+
+    public String getPrixHTVelux() {
+        return prixHTVelux;
+    }
+
+    public void setPrixHTVelux(String prixHTVelux) {
+        this.prixHTVelux = prixHTVelux;
+    }
+
+    public String getPrixTTCVelux() {
+        return prixTTCVelux;
+    }
+
+    public void setPrixTTCVelux(String prixTTCVelux) {
+        this.prixTTCVelux = prixTTCVelux;
+    }
+
+    public String getPrixTTCFitting() {
+        return prixTTCFitting;
+    }
+
+    public void setPrixTTCFitting(String prixTTCFitting) {
+        this.prixTTCFitting = prixTTCFitting;
+    }
+
+    public String getPrixHTFitting() {
+        return prixHTFitting;
+    }
+
+    public void setPrixHTFitting(String prixHTFitting) {
+        this.prixHTFitting = prixHTFitting;
+    }
+
 }

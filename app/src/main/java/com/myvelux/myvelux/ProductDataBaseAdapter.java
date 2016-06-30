@@ -18,7 +18,7 @@ import java.util.HashMap;
 public class ProductDataBaseAdapter {
 
     static final String DATABASE_NAME = "MyVelux.db";
-    static final int DATABASE_VERSION = 7;
+    static final int DATABASE_VERSION = 9;
     static final String TABLE_PRODUCT = "PRODUCT";
 
     // Product Table Columns names
@@ -265,9 +265,8 @@ public class ProductDataBaseAdapter {
         return sizes;
     }
 
-    public String getProductRefVelux(String action, String range, String type, String version, String size)
+    public String[] getProductRefVelux(String range, String type, String version, String size)
     {
-        ArrayList<String> sizes = new ArrayList<>();
         String mySql = " SELECT * FROM "+ TABLE_PRODUCT +
                 " WHERE "+ COL_RANGE_PRODUCT+" LIKE '%" + range + "%'AND " +
                 COL_TYPE_PRODUCT+" LIKE '%" + type + "%' AND " +
@@ -282,11 +281,15 @@ public class ProductDataBaseAdapter {
             return null;
 
         }
+
         cursor.moveToFirst();
-        String refArticle = cursor.getString(cursor.getColumnIndex(COL_REF_ARTICLE));
+        String refArticle = cursor.getString(cursor.getColumnIndex(COL_REF_ARTICLE)).replace("\"","");
+        String prixHT = cursor.getString(cursor.getColumnIndex(COL_PRICE_HT)).replace("\"","");
+        String prixTTC = cursor.getString(cursor.getColumnIndex(COL_PRICE_TTC)).replace("\"","");
+        String[] velux = {refArticle, prixHT.replace(",","."), prixTTC.replace(",",".")};
 
         cursor.close();
-        return refArticle;
+        return velux;
     }
 
     public ArrayList<HashMap<String, String>> getProductFitting(String action, String range, String type, String version, String size)
@@ -342,6 +345,26 @@ public class ProductDataBaseAdapter {
         return todoItems;
     }
 
+    public String[] getPriceFitting(String ref)
+    {
+        String mySql = " SELECT * FROM "+ TABLE_PRODUCT +
+                " WHERE "+ COL_REF_ARTICLE +" LIKE '%" + ref + "%' ";
+
+        Cursor cursor = db.rawQuery(mySql, null);
+
+        if(cursor.getCount()<1)
+        {
+            cursor.close();
+            return null;
+
+        }
+        cursor.moveToFirst();
+        String priceHT = cursor.getString(cursor.getColumnIndex(COL_PRICE_HT)).replace(",",".");
+        String priceTTC = cursor.getString(cursor.getColumnIndex(COL_PRICE_TTC)).replace(",",".");
+        String[] fittingPrice = {priceHT, priceTTC};
+        return fittingPrice;
+    }
+
     public int  updateEntry(Produit product)
     {
         ContentValues values = new ContentValues();
@@ -361,8 +384,17 @@ public class ProductDataBaseAdapter {
 
     }
 
-    public Cursor findAll(){
+    public boolean findAll(){
         String mySql = " SELECT * FROM "+TABLE_PRODUCT;
-        return db.rawQuery(mySql, null);
+        Cursor cursor = db.rawQuery(mySql, null);
+
+        if (cursor.getCount() > 0)
+        {
+            cursor.close();
+            return true;
+        }
+
+        cursor.close();
+        return false;
     }
 }

@@ -19,7 +19,7 @@ import java.util.HashMap;
 public class ClientActivity extends BaseActivity {
 
     ClientDataBaseAdapter clientDataBaseAdapter;
-
+    LoginDataBaseAdapter loginDataBaseAdapter;
     private ListView lv;
 
 
@@ -29,26 +29,42 @@ public class ClientActivity extends BaseActivity {
         setContentView(R.layout.activity_client);
         setTitle("Liste des clients");
 
+        loginDataBaseAdapter = new LoginDataBaseAdapter(this);
+        loginDataBaseAdapter = loginDataBaseAdapter.open();
         clientDataBaseAdapter = new ClientDataBaseAdapter(this);
         clientDataBaseAdapter = clientDataBaseAdapter.open();
 
         final ArrayList<HashMap<String, String>> todoItems = new ArrayList<>();
         HashMap<String, String> hashmap=new HashMap<>();
 
-        Cursor c = clientDataBaseAdapter.findAllValidClients();
-        if (c.moveToFirst())
-        {
-            do{
-                hashmap.put("firstName",c.getString(1));
-                hashmap.put("id",c.getString(0));
-                if(c.getString(9).equals("1")) {
-                    hashmap.put("deleted", "Désactivé");
-                }else {
+        final boolean isAdmin = loginDataBaseAdapter.isAdminById(SharedPrefManager.getIdLogin());
+
+        if(isAdmin) {
+            Cursor c = clientDataBaseAdapter.findAll();
+            if (c.moveToFirst()) {
+                do {
+                    hashmap.put("firstName", c.getString(1));
+                    hashmap.put("id", c.getString(0));
+                    if (c.getString(9).equals("1")) {
+                        hashmap.put("deleted", "Désactivé");
+                    } else {
+                        hashmap.put("deleted", "");
+                    }
+                    todoItems.add(hashmap);
+                    hashmap = new HashMap<>();
+                } while (c.moveToNext());
+            }
+        }else{
+            Cursor c = clientDataBaseAdapter.findAllValidClients();
+            if (c.moveToFirst()) {
+                do {
+                    hashmap.put("firstName", c.getString(1));
+                    hashmap.put("id", c.getString(0));
                     hashmap.put("deleted", "");
-                }
-                todoItems.add(hashmap);
-                hashmap = new HashMap<>();
-            }while (c.moveToNext());
+                    todoItems.add(hashmap);
+                    hashmap = new HashMap<>();
+                } while (c.moveToNext());
+            }
         }
 
         lv = (ListView) findViewById(R.id.listClient);
@@ -71,17 +87,6 @@ public class ClientActivity extends BaseActivity {
                     AlertDialog.Builder adb = new AlertDialog.Builder(ClientActivity.this);
                     adb.setTitle("Client n° " + mapItem.get("id"));
                     adb.setMessage("Choix action ?");
-                    adb.setNeutralButton("Selectionner", new AlertDialog.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int which) {
-                            SharedPrefManager.setIdClient(Integer.parseInt(mapItem.get("id")));
-                            SharedPrefManager.StoreToPref();
-                            Toast.makeText(getBaseContext(), "Client selectionné : "+mapItem.get("firstName"), Toast.LENGTH_SHORT).show();
-                            Intent intent = new Intent(getApplicationContext(), FinalChoiceActivity.class);
-                            startActivity(intent);
-                            finish();
-
-                        }
-                    });
 
                     adb.setNegativeButton("Modifier", new AlertDialog.OnClickListener() {
                         public void onClick(DialogInterface dialog, int which) {
@@ -93,17 +98,31 @@ public class ClientActivity extends BaseActivity {
                         }
                     });
                     if(mapItem.get("deleted").length() == 0) {
-                        adb.setPositiveButton("Supprimer", new AlertDialog.OnClickListener() {
+
+                        adb.setNeutralButton("Selectionner", new AlertDialog.OnClickListener() {
                             public void onClick(DialogInterface dialog, int which) {
-                                todoItems.get(position).put("deleted","Désactivé");
-                                mSchedule.notifyDataSetChanged();
-                                if(SharedPrefManager.getIdClient()==Integer.parseInt(mapItem.get("id"))) {
-                                    SharedPrefManager.DeleteSingleEntryFromPref("idClient");
-                                }
-                                clientDataBaseAdapter.deleteClientById(Integer.parseInt(mapItem.get("id")));
-                                Toast.makeText(getBaseContext(), "Client supprimé", Toast.LENGTH_SHORT).show();
+                                SharedPrefManager.setIdClient(Integer.parseInt(mapItem.get("id")));
+                                SharedPrefManager.StoreToPref();
+                                Toast.makeText(getBaseContext(), "Client selectionné : "+mapItem.get("firstName"), Toast.LENGTH_SHORT).show();
+                                Intent intent = new Intent(getApplicationContext(), FinalChoiceActivity.class);
+                                startActivity(intent);
+                                finish();
+
                             }
                         });
+                        if(isAdmin) {
+                            adb.setPositiveButton("Supprimer", new AlertDialog.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int which) {
+                                    todoItems.get(position).put("deleted","Désactivé");
+                                    mSchedule.notifyDataSetChanged();
+                                    if(SharedPrefManager.getIdClient()==Integer.parseInt(mapItem.get("id"))) {
+                                        SharedPrefManager.DeleteSingleEntryFromPref("idClient");
+                                    }
+                                    clientDataBaseAdapter.deleteClientById(Integer.parseInt(mapItem.get("id")));
+                                    Toast.makeText(getBaseContext(), "Client supprimé", Toast.LENGTH_SHORT).show();
+                                }
+                            });
+                        }
                     }else if  (mapItem.get("deleted").length() != 0){
                         adb.setPositiveButton("Activer", new AlertDialog.OnClickListener() {
                             public void onClick(DialogInterface dialog, int which) {

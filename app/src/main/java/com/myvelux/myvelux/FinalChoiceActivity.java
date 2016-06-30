@@ -1,12 +1,15 @@
 package com.myvelux.myvelux;
 
+import android.Manifest;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.content.res.AssetManager;
 import android.database.Cursor;
 import android.os.Environment;
+import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -27,6 +30,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -34,7 +38,6 @@ import java.util.StringTokenizer;
 
 public class FinalChoiceActivity extends BaseActivity {
 
-    private Reservation resa;
     private Commande com;
     private ListView lv;
     static boolean isAdmin;
@@ -64,25 +67,27 @@ public class FinalChoiceActivity extends BaseActivity {
         loginDataBaseAdapter = new LoginDataBaseAdapter(this);
         loginDataBaseAdapter = loginDataBaseAdapter.open();
         productDataBaseAdapter = new ProductDataBaseAdapter(this);
-
+        productDataBaseAdapter = productDataBaseAdapter.open();
 
         final ArrayList<HashMap<String, String>> todoItems = new ArrayList<>();
         HashMap<String, String> hashmap=new HashMap<>();
-
 
         isAdmin = loginDataBaseAdapter.isAdminById(SharedPrefManager.getIdLogin());
 
         if(SharedPrefManager.getIdClient() != 0 ){
             Cursor c = commandeDataBaseAdapter.findCommandsByClient(SharedPrefManager.getIdClient());
-
-            if (c.moveToFirst())
-            {
-                do{
-                    hashmap.put("room",c.getString(1));
-                    hashmap.put("id",c.getString(0));
+            if (c.moveToFirst()) {
+                do {
+                    hashmap.put("room", c.getString(1));
+                    hashmap.put("id", c.getString(0));
+                    if(c.getString(15).equals("1")) {
+                        hashmap.put("deleted", "Désactivé");
+                    }else {
+                        hashmap.put("deleted", "");
+                    }
                     todoItems.add(hashmap);
                     hashmap = new HashMap<>();
-                }while (c.moveToNext());
+                } while (c.moveToNext());
             }
 
             lv = (ListView) findViewById(R.id.listViewFinal);
@@ -91,7 +96,7 @@ public class FinalChoiceActivity extends BaseActivity {
 
                 //Create Simple adapter (make the list)
                 final SimpleAdapter mSchedule = new SimpleAdapter(this.getBaseContext(), todoItems, R.layout.affichage_client,
-                        new String[]{"room", "id"}, new int[]{R.id.firstNameListView, R.id.idClientListView});
+                        new String[]{"room", "deleted", "id"}, new int[]{R.id.firstNameListView, R.id.deleted});
 
                 lv.setAdapter(mSchedule);
 
@@ -114,25 +119,35 @@ public class FinalChoiceActivity extends BaseActivity {
 
                         adb.setNegativeButton("Modifier", new AlertDialog.OnClickListener() {
                             public void onClick(DialogInterface dialog, int which) {
-                                //Intent intent = new Intent(view.getContext(), RoomActivity.class);
-                                //resa.setCommande(c1);
-                                //arrayCommande.remove(position);
-                                //arrayAdapter.notifyDataSetChanged();
-                                //intent.putExtra("resa", resa);
-                                //startActivity(intent);
-                            }
-                        });
-                        adb.setPositiveButton("Supprimer", new AlertDialog.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int which) {
-                                /*arrayCommande.remove(position);
-                                arrayAdapter.notifyDataSetChanged();
-                                Toast.makeText(getBaseContext(), "Commande supprimée", Toast.LENGTH_SHORT).show();
-                                Intent intent = new Intent(view.getContext(), FinalChoiceActivity.class);
-                                intent.putExtra("resa",resa);
+                                Intent intent = new Intent(view.getContext(), RoomActivity.class);
+                                com = new Commande();
+                                com = commandeDataBaseAdapter.getSinlgeEntry(Integer.parseInt(mapItem.get("id")));
+                                com.setUpdate("true");
+                                todoItems.remove(position);
+                                mSchedule.notifyDataSetChanged();
+                                intent.putExtra("com",com);
                                 startActivity(intent);
-                                finish();*/
                             }
                         });
+                        if(mapItem.get("deleted").length() == 0) {
+                            adb.setPositiveButton("Supprimer", new AlertDialog.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int which) {
+                                    todoItems.get(position).put("deleted","Désactivé");
+                                    mSchedule.notifyDataSetChanged();
+                                    commandeDataBaseAdapter.deleteCommandeById(Integer.parseInt(mapItem.get("id")));
+                                    Toast.makeText(getBaseContext(), "Commande supprimée", Toast.LENGTH_SHORT).show();
+                                }
+                            });
+                        }else{
+                            adb.setPositiveButton("Activer", new AlertDialog.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int which) {
+                                    todoItems.get(position).put("deleted","");
+                                    mSchedule.notifyDataSetChanged();
+                                    commandeDataBaseAdapter.activateCommandeById(Integer.parseInt(mapItem.get("id")));
+                                    Toast.makeText(getBaseContext(), "Commande activée", Toast.LENGTH_SHORT).show();
+                                }
+                            });
+                        }
                         adb.show();
                     }
 
@@ -149,14 +164,13 @@ public class FinalChoiceActivity extends BaseActivity {
                 btnEnd.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        Intent intent = new Intent(v.getContext(), MyVeluxPDF.class);
-                        /* ************** changer avec le vrai client  *************** */
-                        resa = new Reservation();
-                        resa.setCommande(com);
-                        resa.setClient(new Client("1", "Dumou", "Valou", "Chezlui", "666666", "CItédlaMort", "0666666666", "0456642312", "dumou.valou@yahou.nigeria"));
-                        /* ************** *********** *************** */
-                        intent.putExtra("resa",resa);
-                        startActivity(intent);
+                        boolean valid = commandeDataBaseAdapter.findCommandsValidByClient(SharedPrefManager.getIdClient());
+                        if(valid){
+                            Intent intent = new Intent(v.getContext(), MyVeluxPDF.class);
+                            startActivity(intent);
+                        }else{
+                            Toast.makeText(getBaseContext(), "Aucune commande valide", Toast.LENGTH_SHORT).show();
+                        }
                     }
                 });
             } else{
@@ -171,13 +185,15 @@ public class FinalChoiceActivity extends BaseActivity {
             btnContinue.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    if(SharedPrefManager.getIdClient()!=0){
+                    if(SharedPrefManager.getIdClient()!=0 && productDataBaseAdapter.findAll()){
                         // start new activity
                         Intent intent = new Intent(v.getContext(), RoomActivity.class);
                         com = new Commande();
                         intent.putExtra("com",com);
                         startActivity(intent);
-                    }else{
+                    }else if(!productDataBaseAdapter.findAll()) {
+                        Toast.makeText(getBaseContext(), "Veuillez importer les produits", Toast.LENGTH_SHORT).show();
+                    }else {
                         Toast.makeText(getBaseContext(), "Veuillez créer ou selectionner un client", Toast.LENGTH_SHORT).show();
                     }
                 }
@@ -233,8 +249,7 @@ public class FinalChoiceActivity extends BaseActivity {
     }
 
     public void importProduct(){
-
-        productDataBaseAdapter = productDataBaseAdapter.open();
+        this.verifyStoragePermissions(this);
         productDataBaseAdapter.deleteProducts();
         FileReader file = null;
         try {
@@ -253,11 +268,38 @@ public class FinalChoiceActivity extends BaseActivity {
                 }
                 productDataBaseAdapter.insertRowCSV(dataRow);
             }
-            productDataBaseAdapter.getDatabaseInstance().close();
+
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
+        }
+    }
+    // Storage Permissions
+    private static final int REQUEST_EXTERNAL_STORAGE = 1;
+    private static String[] PERMISSIONS_STORAGE = {
+            Manifest.permission.READ_EXTERNAL_STORAGE,
+            Manifest.permission.WRITE_EXTERNAL_STORAGE
+    };
+
+    /**
+     * Checks if the app has permission to write to device storage
+     *
+     * If the app does not has permission then the user will be prompted to grant permissions
+     *
+     * @param activity
+     */
+    public static void verifyStoragePermissions(AppCompatActivity activity) {
+        // Check if we have write permission
+        int permission = ActivityCompat.checkSelfPermission(activity, Manifest.permission.WRITE_EXTERNAL_STORAGE);
+
+        if (permission != PackageManager.PERMISSION_GRANTED) {
+            // We don't have permission so prompt the user
+            ActivityCompat.requestPermissions(
+                    activity,
+                    PERMISSIONS_STORAGE,
+                    REQUEST_EXTERNAL_STORAGE
+            );
         }
     }
 

@@ -41,9 +41,11 @@ public class FittingActivity extends BaseActivity {
 
         listFitting = (ListView) findViewById(R.id.listFitting);
 
-        String ref_velux = productDataBaseAdapter.getProductRefVelux(com.getAction(), com.getRange(), com.getType(), com.getVersion(), com.getSize());
+        String[] velux = productDataBaseAdapter.getProductRefVelux(com.getRange(), com.getType(), com.getVersion(), com.getSize());
 
-        com.setRefArticle(ref_velux);
+        com.setRefArticle(velux[0]);
+        com.setPrixHTVelux(velux[1]);
+        com.setPrixTTCVelux(velux[2]);
 
         fittings = productDataBaseAdapter.getProductFitting(com.getAction(), com.getRange(), com.getType(), com.getVersion(), com.getSize());
 
@@ -62,10 +64,17 @@ public class FittingActivity extends BaseActivity {
                                         final int position, long id) {
                     Intent intent = new Intent(view.getContext(), FinalChoiceActivity.class);
                     final HashMap<String, String> mapItem = (HashMap<String, String>) listFitting.getItemAtPosition(position);
-                    com.setFitting(mapItem.get("label_article"));
+                    com.setFitting(mapItem.get("libel_article"));
                     com.setRefFitting(mapItem.get("ref_article"));
+                    String[] fittingPrice = productDataBaseAdapter.getPriceFitting(com.getRefFitting());
+                    com.setPrixHTFitting(fittingPrice[0]);
+                    com.setPrixTTCFitting(fittingPrice[1]);
                     com.setIdClient(String.valueOf(SharedPrefManager.getIdClient()));
-                    commandeDataBaseAdapter.insertEntry(com);
+                    if(com.getUpdate().equals("true")){
+                        commandeDataBaseAdapter.updateCommande(com);
+                    }else {
+                        commandeDataBaseAdapter.insertEntry(com);
+                    }
                     intent.putExtra("com", com);
                     startActivity(intent);
                 }

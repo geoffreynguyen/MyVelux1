@@ -9,7 +9,7 @@ import android.database.sqlite.SQLiteDatabase;
 public class ClientDataBaseAdapter {
 
     static final String DATABASE_NAME = "MyVelux.db";
-    static final int DATABASE_VERSION = 7;
+    static final int DATABASE_VERSION = 9;
     static final String TABLE_CLIENTS = "CLIENT";
     // Client Table Columns names
 
@@ -178,7 +178,7 @@ public class ClientDataBaseAdapter {
     }
 
     public Cursor findAll(){
-        String mySql = " SELECT * FROM "+TABLE_CLIENTS;
+        String mySql = " SELECT * FROM "+TABLE_CLIENTS + " ORDER BY " + COL_DELETED + " ASC";
         return db.rawQuery(mySql, null);
     }
 }

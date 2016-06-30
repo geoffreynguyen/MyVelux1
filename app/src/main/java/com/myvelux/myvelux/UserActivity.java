@@ -23,8 +23,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 public class UserActivity extends BaseActivity {
-    LoginDataBaseAdapter loginDataBaseAdapter;
 
+    LoginDataBaseAdapter loginDataBaseAdapter;
     private ListView lv;
 
 

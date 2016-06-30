@@ -3,6 +3,7 @@ package com.myvelux.myvelux;
 import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.os.Environment;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
@@ -15,16 +16,27 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.itextpdf.text.pdf.PdfReader;
+
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 
 public class MyVeluxPDF extends AppCompatActivity {
 
-    String fname = "devis";
+    String fname = "";
     EditText fnameread;
-    Button newClient, read;
+    Button read;
     TextView filecon;
-    private Reservation resa;
+    ArrayList<Commande> commandes;
+    private Client client;
+    ClientDataBaseAdapter clientDataBaseAdapter;
+    CommandeDataBaseAdapter commandeDataBaseAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,58 +44,52 @@ public class MyVeluxPDF extends AppCompatActivity {
         setContentView(R.layout.activity_my_velux_pdf);
         this.verifyStoragePermissions(this);
 
-        resa = (Reservation) getIntent().getSerializableExtra("resa");
-        //resa = (Reservation) getIntent().getExtras().getSerializable("resa");
-        Calendar c = Calendar.getInstance();
-        System.out.println("Current time => " + c.getTime());
-        SimpleDateFormat df = new SimpleDateFormat("dd-MM-yyyy");
-        String formattedDate = df.format(c.getTime());
+        commandeDataBaseAdapter = new CommandeDataBaseAdapter(this);
+        commandeDataBaseAdapter = commandeDataBaseAdapter.open();
+        clientDataBaseAdapter = new ClientDataBaseAdapter(this);
+        clientDataBaseAdapter = clientDataBaseAdapter.open();
 
+
+        commandes = commandeDataBaseAdapter.findCommandsByClientExport(SharedPrefManager.getIdClient());
+        client = clientDataBaseAdapter.getSinlgeEntry(SharedPrefManager.getIdClient());
 
         fnameread = (EditText) findViewById(R.id.fnameread);
 
-       // fname = formattedDate + "-"+ resa.getCommande().toString();
+        Calendar cal = Calendar.getInstance();
+        Date currentLocalTime = cal.getTime();
+        DateFormat date = new SimpleDateFormat("dd-MM-yyyy");
+        String localTime = date.format(currentLocalTime);
 
-        newClient = (Button) findViewById(R.id.btnNewClient);
-        read = (Button) findViewById(R.id.btnread);
         filecon = (TextView) findViewById(R.id.filecon);
-
+        fname = "Devis_" + client.getLastName() + "_" + localTime;
         //Generate PDF
         GeneratorPDF fop = new GeneratorPDF();
-        fop.write(fname, resa);
-        if (fop.write(fname, resa)) {
+        fop.write(fname, commandes, client);
+        if (fop.write(fname, commandes, client)) {
             Toast.makeText(getApplicationContext(),
                     fname + ".pdf created", Toast.LENGTH_SHORT)
                     .show();
+
+            File filelocation = new File(Environment.getExternalStorageDirectory().getPath(), fname +".pdf");
+            Uri path = Uri.fromFile(filelocation);
+            Intent emailIntent = new Intent(Intent.ACTION_SEND);
+
+            emailIntent.setType("application/pdf");
+            String to[] = {client.getEmail()};
+            emailIntent.putExtra(Intent.EXTRA_EMAIL, to);
+
+            emailIntent.putExtra(Intent.EXTRA_STREAM, path);
+            emailIntent.putExtra(Intent.EXTRA_SUBJECT, fname);
+            emailIntent.putExtra(Intent.EXTRA_TEXT, "Ci-joint, le devis AVR.");
+
+            startActivity(Intent.createChooser(emailIntent , "Send email..."));
+            finish();
+
         } else {
             Toast.makeText(getApplicationContext(), "I/O error",
                     Toast.LENGTH_SHORT).show();
+            finish();
         }
-
-        newClient.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(v.getContext(), ClientActivity.class);
-                intent.putExtra("resa", resa);
-                startActivity(intent);
-            }
-        });
-        read.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View arg0) {
-                // TODO Auto-generated method stub
-                String readfilename = fnameread.getText().toString();
-                GeneratorPDF fop = new GeneratorPDF();
-                String text = fop.read(fname/*readfilename*/);
-                if (text != null) {
-                    filecon.setText(text);
-                } else {
-                    Toast.makeText(getApplicationContext(), "File not Found",
-                            Toast.LENGTH_SHORT).show();
-                    filecon.setText(null);
-                }
-            }
-        });
 
     }
     // Storage Permissions
