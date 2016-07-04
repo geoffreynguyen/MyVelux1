@@ -13,6 +13,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
@@ -24,6 +25,7 @@ public class FittingActivity extends BaseActivity {
     ProductDataBaseAdapter productDataBaseAdapter;
     CommandeDataBaseAdapter commandeDataBaseAdapter;
     ListView listFitting;
+    TextView currentFitting;
     ArrayList<HashMap<String, String>> fittings;
 
     @Override
@@ -38,6 +40,11 @@ public class FittingActivity extends BaseActivity {
         commandeDataBaseAdapter = commandeDataBaseAdapter.open();
 
         com = (Commande) getIntent().getSerializableExtra("com");
+
+        currentFitting = (TextView) findViewById(R.id.currentFitting);
+        if(com.getFitting()!=null){
+            currentFitting.setText("Raccord : "+com.getFitting());
+        }
 
         listFitting = (ListView) findViewById(R.id.listFitting);
 

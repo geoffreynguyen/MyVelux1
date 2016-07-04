@@ -13,6 +13,9 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.TextView;
+
+import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 
@@ -20,6 +23,7 @@ public class RangeActivity extends BaseActivity {
 
     static private Commande com;
     ListView listRange;
+    TextView currentRange;
     ArrayList<String> ranges;
 
     @Override
@@ -30,6 +34,10 @@ public class RangeActivity extends BaseActivity {
 
         com = (Commande) getIntent().getSerializableExtra("com");
 
+        currentRange = (TextView) findViewById(R.id.currentRange);
+        if(com.getRange()!=null){
+            currentRange.setText("Gamme : "+com.getRange());
+        }
         listRange = (ListView)findViewById(R.id.listRange);
         ranges = new ArrayList<>();
         ranges.add("Electrique");

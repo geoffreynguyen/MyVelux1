@@ -10,6 +10,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import java.lang.reflect.Array;
 import java.util.ArrayList;
@@ -22,6 +23,7 @@ public class VersionActivity extends BaseActivity {
 
     static private Commande com;
     ListView listVersions;
+    TextView currentVersion;
     ArrayList<String> versions;
 
     ProductDataBaseAdapter productDataBaseAdapter;
@@ -36,6 +38,11 @@ public class VersionActivity extends BaseActivity {
         productDataBaseAdapter = productDataBaseAdapter.open();
 
         com = (Commande) getIntent().getSerializableExtra("com");
+
+        currentVersion = (TextView) findViewById(R.id.currentVersion);
+        if(com.getVersion()!=null){
+            currentVersion.setText("Version : "+com.getVersion());
+        }
 
         listVersions = (ListView)findViewById(R.id.listVersion);
         versions = productDataBaseAdapter.getProductVersion(com.getRange(), com.getType());

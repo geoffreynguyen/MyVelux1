@@ -10,6 +10,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import java.util.ArrayList;
 
@@ -17,6 +18,7 @@ public class TypeActivity extends BaseActivity {
 
     static private Commande com;
     ListView listTypes;
+    TextView currentType;
     ArrayList<String> types;
     ProductDataBaseAdapter productDataBaseAdapter;
 
@@ -30,6 +32,11 @@ public class TypeActivity extends BaseActivity {
         productDataBaseAdapter = productDataBaseAdapter.open();
 
         com = (Commande) getIntent().getSerializableExtra("com");
+
+        currentType = (TextView) findViewById(R.id.currentType);
+        if(com.getType()!=null){
+            currentType.setText("Matière : "+com.getType());
+        }
 
         listTypes = (ListView)findViewById(R.id.listType);
         types = productDataBaseAdapter.getProductType(com.getRange());

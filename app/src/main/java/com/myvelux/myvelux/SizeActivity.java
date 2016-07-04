@@ -11,6 +11,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -20,6 +21,7 @@ public class SizeActivity extends BaseActivity {
     static private Commande com;
     ProductDataBaseAdapter productDataBaseAdapter;
     ListView listSizes;
+    TextView currentSize;
     ArrayList<String> sizes;
 
     @Override
@@ -32,6 +34,11 @@ public class SizeActivity extends BaseActivity {
         productDataBaseAdapter = productDataBaseAdapter.open();
 
         com = (Commande) getIntent().getSerializableExtra("com");
+
+        currentSize = (TextView) findViewById(R.id.currentSize);
+        if(com.getSize()!=null){
+            currentSize.setText("Taille : "+com.getSize());
+        }
 
         listSizes = (ListView)findViewById(R.id.listSizes);
         sizes = productDataBaseAdapter.getProductSize(com.getRange(), com.getType(), com.getVersion());

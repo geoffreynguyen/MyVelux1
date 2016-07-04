@@ -21,5 +21,12 @@
             android:layout_height="wrap_content"
             android:id="@+id/listVersion"
             android:layout_gravity="center_horizontal" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text=""
+            android:id="@+id/currentVersion"
+            android:gravity="center" />
     </LinearLayout>
 </RelativeLayout>

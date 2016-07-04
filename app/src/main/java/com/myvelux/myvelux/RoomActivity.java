@@ -10,12 +10,15 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
+import android.widget.TextView;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 
 public class RoomActivity extends BaseActivity {
 
     private ListView listViewCustom;
+    private TextView currentRoom;
     private Commande com;
 
     @Override
@@ -26,6 +29,10 @@ public class RoomActivity extends BaseActivity {
 
         com = (Commande) getIntent().getSerializableExtra("com");
 
+        currentRoom = (TextView) findViewById(R.id.currentRoom);
+        if(com.getRoom()!=null){
+            currentRoom.setText("Pièce : "+com.getRoom());
+        }
         listViewCustom = (ListView) findViewById(R.id.listviewperso);
         ArrayList<HashMap<String, String>> listItem = new ArrayList<HashMap<String, String>>();
 
@@ -63,6 +70,7 @@ public class RoomActivity extends BaseActivity {
                 startActivity(intent);
             }
         });
+
 
 
     }

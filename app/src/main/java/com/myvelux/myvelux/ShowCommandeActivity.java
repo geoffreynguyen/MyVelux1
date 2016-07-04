@@ -11,7 +11,7 @@ public class ShowCommandeActivity extends BaseActivity {
 
     private int idCommande;
     private Commande commande;
-    TextView action, actionPrice, room, range, type, version, size, fitting;
+    TextView action, actionPrice, room, range, type, version, size, priceProduct, refProduct, fitting, priceFitting, refFitting;
     CommandeDataBaseAdapter commandeDataBaseAdapter;
 
     @Override
@@ -30,22 +30,28 @@ public class ShowCommandeActivity extends BaseActivity {
         type = (TextView) findViewById(R.id.typeShow);
         version = (TextView) findViewById(R.id.versionShow);
         size = (TextView) findViewById(R.id.sizeShow);
+        priceProduct = (TextView) findViewById(R.id.priceProduct);
+        refProduct = (TextView) findViewById(R.id.refProduct);
         fitting = (TextView) findViewById(R.id.fittingShow);
+        priceFitting = (TextView) findViewById(R.id.priceFitting);
+        refFitting = (TextView) findViewById(R.id.refFitting);
 
         idCommande = getIntent().getIntExtra("idCommande", -1);
 
         commande = commandeDataBaseAdapter.getSinlgeEntry(idCommande);
 
-        Log.i("idCommande", String.valueOf(idCommande));
-
         action.setText(commande.getAction());
-        actionPrice.setText(commande.getActionPrice());
+        actionPrice.setText(commande.getActionPrice()+" €");
         room.setText(commande.getRoom());
         range.setText(commande.getRange());
         type.setText(commande.getType());
         version.setText(commande.getVersion());
         size.setText(commande.getSize());
+        priceProduct.setText(commande.getPrixHTVelux()+" € HT");
+        refProduct.setText(commande.getRefArticle());
         fitting.setText(commande.getFitting());
+        priceFitting.setText(commande.getPrixHTFitting()+" € HT");
+        refFitting.setText(commande.getRefFitting());
     }
 
 

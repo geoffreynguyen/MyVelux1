@@ -217,18 +217,6 @@ public class ManageClient extends BaseActivity {
         return valid;
     }
 
-    private boolean clientValid() {
-        boolean valid = false;
-
-        if(!lastName.getText().toString().equals(" ") && !firstName.getText().toString().equals(" ")){
-            if(!address.getText().toString().equals(" ")){
-                valid = true;
-            }
-        }
-
-        return valid;
-    }
-
     @Override
     public void onBackPressed()
     {
